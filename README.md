@@ -2,31 +2,4 @@ English | [简体中文](./README.zh-CN.md)
 
 <h1 align="center">Lenovo Cost Forecast</h1>
 
-### Project setup
-
-- Clone repo
-```bash
-git clone https://github.com/sendya/ant-design-pro-vue.git
-cd ant-design-pro-vue
-```
-
-- Install dependencies
-```
-yarn install
-```
-
-- Compiles and hot-reloads for development
-```
-yarn run serve
-```
-
-- Compiles and minifies for production
-```
-yarn run build
-```
-
-- Lints and fixes files
-```
-yarn run lint
-```
-
+this is an enterprise-level resource management project based on ant design pro vue
