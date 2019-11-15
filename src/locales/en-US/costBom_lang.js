@@ -6,9 +6,9 @@ const tableTitle_langEn = [
     {
         title: 'Part',
         dataIndex: 'part',
+        fixed: 'left',
         align: 'left',
         width: 160, //have sub-level, need specific size
-        // sorter: true,
         scopedSlots: { customRender: 'part' },
     },
     {
@@ -16,224 +16,216 @@ const tableTitle_langEn = [
         dataIndex: 'itemDesc',
         align: 'left',
         width: commonWidth.itemDesc,
-        // sorter: true
     },
     {
         title: 'Lv',
         dataIndex: 'lvl',
         align: 'right',
         width: commonWidth.lvl,
-        // sorter: true
     },
     {
         title: 'Qty',
         dataIndex: 'qtyper',
         align: 'right',
         width: commonWidth.qtyper,
-        // sorter: true
     },
     {
         title: 'AltGrp',
         dataIndex: 'altgrup',
         align: 'left',
         width: commonWidth.altgrup,
-        // sorter: true
     },
     {
         title: 'AltPri',
         dataIndex: 'altpri',
         align: 'right',
         width: commonWidth.altpri,
-        // sorter: true
     },
     {
         title: 'AltPer',
         dataIndex: 'altpercent',
         align: 'right',
         width: commonWidth.altpercent,
-        // sorter: true
-    },
-    {
-        title: 'CostPlant',
-        dataIndex: 'costPlant',
-        align: 'left',
-        width: commonWidth.plant,
-        // sorter: true
     },
     {
         title: 'CostName',
         dataIndex: 'costName',
         align: 'left',
         width: commonWidth.costName,
-        // sorter: true
     },
     {
         title: 'm1',
         dataIndex: 'm1',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm2',
         dataIndex: 'm2',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm3',
         dataIndex: 'm3',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm4',
         dataIndex: 'm4',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm5',
         dataIndex: 'm5',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm6',
         dataIndex: 'm6',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm7',
         dataIndex: 'm7',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm8',
         dataIndex: 'm8',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm9',
         dataIndex: 'm9',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm10',
         dataIndex: 'm10',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm11',
         dataIndex: 'm11',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm12',
         dataIndex: 'm12',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm1',
         dataIndex: 'lm1',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm2',
         dataIndex: 'lm2',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm3',
         dataIndex: 'lm3',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm4',
         dataIndex: 'lm4',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm5',
         dataIndex: 'lm5',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm6',
         dataIndex: 'lm6',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm7',
         dataIndex: 'lm7',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm8',
         dataIndex: 'lm8',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm9',
         dataIndex: 'lm9',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm10',
         dataIndex: 'lm10',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm11',
         dataIndex: 'lm11',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm12',
         dataIndex: 'lm12',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
+    },
+    {
+        title: 'CostPlant',
+        dataIndex: 'costPlant',
+        align: 'left',
+        width: commonWidth.plant,
     }
 ]
 
@@ -244,175 +236,174 @@ const secondTableTitle_langEn = [
         dataIndex: 'costName',
         align: 'left',
         width: commonWidth.costName,
-        // sorter: true
     },
     {
         title: 'm1',
         dataIndex: 'm1',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm2',
         dataIndex: 'm2',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm3',
         dataIndex: 'm3',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm4',
         dataIndex: 'm4',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm5',
         dataIndex: 'm5',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm6',
         dataIndex: 'm6',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm7',
         dataIndex: 'm7',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm8',
         dataIndex: 'm8',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm9',
         dataIndex: 'm9',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm10',
         dataIndex: 'm10',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm11',
         dataIndex: 'm11',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'm12',
         dataIndex: 'm12',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm1',
         dataIndex: 'lm1',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm2',
         dataIndex: 'lm2',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm3',
         dataIndex: 'lm3',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm4',
         dataIndex: 'lm4',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm5',
         dataIndex: 'lm5',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm6',
         dataIndex: 'lm6',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm7',
         dataIndex: 'lm7',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm8',
         dataIndex: 'lm8',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm9',
         dataIndex: 'lm9',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm10',
         dataIndex: 'lm10',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm11',
         dataIndex: 'lm11',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     },
     {
         title: 'lm12',
         dataIndex: 'lm12',
         align: 'right',
         width: commonWidth.m,
-        // sorter: true
+        scopedSlots: { customRender: 'convert' },
     }
 ]
 

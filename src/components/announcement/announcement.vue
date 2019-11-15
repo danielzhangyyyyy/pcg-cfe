@@ -15,13 +15,22 @@ export default {
   },
   created() {
     //页面刚进入时开启长连接
-    this.initWebSocket();
+    this.startConnect();
   },
   destroyed: function() {
     //页面销毁时关闭长连接
     this.websocketclose();
   },
   methods: {
+    startConnect() {
+      this.initWebSocket();
+      let self = this;
+      setInterval(() => {
+        if (self.websock) {
+          self.websock.send("ping");
+        }
+      }, 1000 * 60 * 4);
+    },
     initWebSocket() {
       //初始化weosocket
       let wsuri = "";
@@ -56,7 +65,8 @@ export default {
       //这个时候数据就只能从一个出口出，所以让后台加了一个键，例如键为1时，是每隔1秒推送的数据，为2时是发送标识后再推送的数据，以作区分
       if (msgCode.includes(retData.code)) {
         this.$notification.open({
-          message: retData.code.substr(0,1).toUpperCase()+retData.code.substr(1),
+          message:
+            retData.code.substr(0, 1).toUpperCase() + retData.code.substr(1),
           description: retData.message,
           duration: 0,
           style: { background: msgBcgrdColor[msgCode.indexOf(retData.code)] }
@@ -78,7 +88,7 @@ export default {
 
     websocketclose(e) {
       //关闭
-      //console.log("connection closed (" + e.code + ")");
+      console.log("connection closed (" + e.code + ")");
     }
   }
 };

@@ -1,6 +1,7 @@
 import { axios } from '@/utils/request'
 // eslint-disable-next-line
-import { BasicLayout, RouteView, UserLayout } from '@/layouts'
+import { BasicLayout, BlankLayout, PageView, RouteView, UserLayout } from '@/layouts'
+import { bxAnaalyse } from '@/core/icons'
 
 const api = {
     //getMenu: '/sys/login/getMenu', // 查询当前用户的菜单(蜻蜓权限)
@@ -27,7 +28,7 @@ export function generatorDynamicRouter(parameter) {
 }
 
 //从后台获取的列表数据添加到children数组中
-const localRouter = JSON.parse(localStorage.getItem('pro__GET_MENU'))
+//const localRouter = JSON.parse(localStorage.getItem('pcg__GET_MENU'))
 
 export function constructRouter(localRouter) {
     let lastasyncRouterMap = [{
@@ -48,7 +49,7 @@ export function constructRouter(localRouter) {
 
     if (localRouter) {
         // let newRouterMap = JSON.parse(localRouter.value).result;
-        let newRouterMap = JSON.parse(localStorage.getItem('pro__GET_MENU')).value;
+        let newRouterMap = JSON.parse(localStorage.getItem('pcg__GET_MENU')).value;
         console.log('newRouter', newRouterMap);
         for (let i = 0; i < newRouterMap.length; i++) {
             // 一级菜单
@@ -152,7 +153,7 @@ export function constructRouter(localRouter) {
                     component: () => import('@/views/whereUsedModel/whereUsedModel_list'),
                     meta: { title: 'whereUsed model list', icon: 'table', keepAlive: false }
                 }, {
-                    path: '/upload/upload_list/:id/origin/:origin',
+                    path: '/upload/upload_list/:id/origin/:origin/:eventName/:rptId',
                     name: 'upload_list',//该name值不可更改
                     component: () => import('@/views/upload/upload_list'),
                     meta: { title: 'Upload list', icon: 'table', keepAlive: false }
@@ -336,7 +337,7 @@ export function constructRouter(localRouter) {
                     name: 'l1CostBomModelList',
                     component: () => import('@/views/l1CostBom/l1CostBom_modelList'),
                     meta: { title: 'L1 CostBom Model List', icon: 'table', keepAlive: false }
-                },
+                }
             ]
         }
 
@@ -346,8 +347,7 @@ export function constructRouter(localRouter) {
     return lastasyncRouterMap;
 }
 
-console.log(constructRouter(localRouter));
-export const asyncRouterMap = constructRouter(localRouter)
+// export const asyncRouterMap = constructRouter(localRouter)
 
 /**
  * 基础路由
@@ -364,6 +364,33 @@ export const constantRouterMap = [
                 path: 'login',
                 name: 'login',
                 component: () => import('@/views/user/Login')
+            },
+            {
+                path: 'register',
+                name: 'register',
+                component: () => import('@/views/user/Register')
+            },
+            {
+                path: 'register-result',
+                name: 'registerResult',
+                component: () => import('@/views/user/RegisterResult')
+            }
+        ]
+    },
+    {
+        path: '/404',
+        name: 'error',
+        component: () => import('@/views/exception/404')
+    },
+    {
+        path: '/test',
+        component: BlankLayout,
+        redirect: '/test/home',
+        children: [
+            {
+                path: 'home',
+                name: 'TestHome',
+                component: () => import('@/views/Home')
             }
         ]
     }]

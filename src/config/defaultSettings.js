@@ -24,12 +24,12 @@ export default {
   autoHideHeader: true, //  auto hide header
   colorWeak: false,
   multiTab: true,
-  itCode: '',
+  itcode: '',
   production: false,
   // production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true',
   // vue-ls options
   storageOptions: {
-    namespace: 'pro__', // key prefix
+    namespace: 'pcg__', // key prefix
     name: 'ls', // name variable Vue.[ls] or this.[$ls],
     storage: 'local' // storage name session, local, memory
   }

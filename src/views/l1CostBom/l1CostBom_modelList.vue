@@ -52,9 +52,14 @@
                 currentPageManipulationAuth: ["UploadEnforced"],
                 pagination: {
                     showSizeChanger: true,
-                    hideOnSinglePage: true,
                     pageSizeOptions: ["10", "50", "100", "150"],
-                    onShowSizeChange: this.showSizeChange
+                    onShowSizeChange: this.showSizeChange,
+                    showTotal: total =>
+                        total < 2000
+                            ? total == 1
+                            ? `total ${total} row`
+                            : `total ${total} rows`
+                            : this.$t("lang.messageFor2000Records"),
                 },
                 description: "",
                 scroll: {y:false}

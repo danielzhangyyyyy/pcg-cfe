@@ -12,7 +12,7 @@
         :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
         @change="handleTabClick"
       >
-        <a-tab-pane key="tab1" tab="">
+        <a-tab-pane key="tab1" tab>
           <a-form-item>
             <a-input
               size="large"
@@ -20,7 +20,7 @@
               placeholder="CFE account"
               v-decorator="[
                 'username',
-                {rules: [{ required: true, message: 'Please enter your ITCode' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+                {rules: [{ required: true, message: 'Please enter your CFE account' }], validateTrigger: 'change'}
               ]"
             >
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }" />
@@ -54,75 +54,37 @@
         >Login</a-button>
       </a-form-item>
     </a-form>
-
-    <two-step-captcha
-      v-if="requiredTwoStepCaptcha"
-      :visible="stepCaptchaVisible"
-      @success="stepCaptchaSuccess"
-      @cancel="stepCaptchaCancel"
-    ></two-step-captcha>
   </div>
 </template>
 
 <script>
 import Vue from "vue";
-import md5 from "md5";
-import TwoStepCaptcha from "@/components/tools/TwoStepCaptcha";
 import { mapActions } from "vuex";
 import { timeFix } from "@/utils/util";
 import { login, getMenu } from "@/api/loginApi";
-import { generatorDynamicRouter } from "@/config/router.config";
+import {
+  generatorDynamicRouter,
+  constructRouter,
+  constantRouterMap
+} from "@/config/router.config";
 
 export default {
-  components: {
-    TwoStepCaptcha
-  },
   data() {
     return {
       customActiveKey: "tab1",
       loginBtn: false,
-      // login type: 0 email, 1 username, 2 telephone
-      loginType: 0,
-      requiredTwoStepCaptcha: false,
-      stepCaptchaVisible: false,
       form: this.$form.createForm(this),
       state: {
         time: 60,
         loginBtn: false,
-        // login type: 0 email, 1 username, 2 telephone
-        loginType: 0,
         smsSendBtn: false
-      },
-      configMenu: ""
+      }
     };
   },
-  created() {
-    console.log(12121212);
-    // get2step({ })
-    //   .then(res => {
-    //     this.requiredTwoStepCaptcha = res.result.stepCode
-    //   })
-    //   .catch(() => {
-    //     this.requiredTwoStepCaptcha = false
-    //   })
-    // this.requiredTwoStepCaptcha = true
-  },
   methods: {
-    ...mapActions(["Login", "Logout"]),
-    // handler
-    handleUsernameOrEmail(rule, value, callback) {
-      const { state } = this;
-      const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
-      if (regex.test(value)) {
-        state.loginType = 0;
-      } else {
-        state.loginType = 1;
-      }
-      callback();
-    },
+    ...mapActions(["Login"]),
     handleTabClick(key) {
       this.customActiveKey = key;
-      // this.form.resetFields()
     },
     handleSubmit(e) {
       // 登录
@@ -130,135 +92,74 @@ export default {
       const {
         form: { validateFields },
         state,
-        customActiveKey,
         Login
-        // GetMenu
       } = this;
-
       state.loginBtn = true;
-
-      const validateFieldsKey =
-        customActiveKey === "tab1"
-          ? ["username", "password"]
-          : ["mobile", "captcha"];
-      validateFields(validateFieldsKey, { force: true }, (err, values) => {
-        if (!err) {
-          console.log(err);
-          const loginParams = { ...values };
-          delete loginParams.username;
-          loginParams[!state.loginType ? "email" : "username"] =
-            values.username;
-          // loginParams.password = md5(values.password)
-          // console.log(loginParams);//传输数据
-          // this.$set(this.loginParams,this.loginParams.length,dict);
-          Login(loginParams)
-            .then(res => this.loginSuccess(res))
-            .catch(err => this.requestFailed(err))
-            .finally(() => {
-              state.loginBtn = false;
-            });
-        } else {
-          setTimeout(() => {
-            state.loginBtn = false;
-          }, 600);
-        }
-      });
-    },
-
-    getCaptcha(e) {
-      e.preventDefault();
-      const {
-        form: { validateFields },
-        state
-      } = this;
-
-      validateFields(["mobile"], { force: true }, (err, values) => {
-        if (!err) {
-          state.smsSendBtn = true;
-
-          const interval = window.setInterval(() => {
-            if (state.time-- <= 0) {
-              state.time = 60;
-              state.smsSendBtn = false;
-              window.clearInterval(interval);
-            }
-          }, 1000);
-
-          const hide = this.$message.loading("验证码发送中..", 0);
-          login({ mobile: values.mobile })
-            .then(res => {
-              setTimeout(hide, 2500);
-              this.$notification["success"]({
-                message: "提示",
-                description:
-                  "验证码获取成功，您的验证码为：" + res.result.captcha,
-                duration: 8
+      validateFields(
+        ["username", "password"],
+        { force: true },
+        (err, values) => {
+          if (!err) {
+            Login(values)
+              .then(res => this.loginSuccess(res))
+              .catch(err => this.requestFailed(err))
+              .finally(() => {
+                state.loginBtn = false;
               });
-            })
-            .catch(err => {
-              setTimeout(hide, 1);
-              clearInterval(interval);
-              state.time = 60;
-              state.smsSendBtn = false;
-              this.requestFailed(err);
-            });
+          } else {
+            setTimeout(() => {
+              state.loginBtn = false;
+            }, 500);
+          }
         }
-      });
+      );
     },
-    stepCaptchaSuccess() {
-      this.loginSuccess();
-    },
-    stepCaptchaCancel() {
-      this.Logout().then(() => {
-        this.loginBtn = false;
-        this.stepCaptchaVisible = false;
-      });
-    },
-    loginSuccess(res) {
-      console.log(res);
+    async loginSuccess(res) {
       if (res.code == 0) {
         const resr = res.result;
-        const itCode = resr.itCode;
+        const itcode = resr.itcode;
         const loginName = resr.loginName;
         const productGroup = res.result.productGroup;
         this.$store.dispatch("setProdcutGroup", { productGroup });
         Vue.ls.set("PRODUCTGROUP", productGroup);
-        this.$store.dispatch("GetUserInfo", { loginName, itCode });
+        this.$store.dispatch("GetUserInfo", { loginName, itcode });
         Vue.ls.set("LOGINNAME", loginName);
-        Vue.ls.set("USER_ITCODE", resr.itCode); // OK
-        generatorDynamicRouter({ "pcgcfe-java-token": resr.token })
-          // getMenu({ 'llsc-token': resr.token })
-          .then(res => this.getMenuSuccess(res))
-          .catch(err => this.requestFailed(err))
-          .finally(() => {});
+        Vue.ls.set("USER_ITCODE", resr.itcode); // OK
+        try {
+          let dynamicRoute = await generatorDynamicRouter({
+            "pcgcfe-java-token": resr.token
+          });
+          let isSaved = await this.$store.dispatch(
+            "SaveMenu",
+            dynamicRoute.result
+          );
+          this.$router.addRoutes(
+            constantRouterMap.concat(constructRouter(dynamicRoute.result)),
+            { replace: true }
+          );
+          this.getMenuSuccess(dynamicRoute);
+        } catch (err) {
+          this.requestFailed(err);
+        }
       } else {
         this.requestFailed(res.msg);
       }
     },
-
     getMenuSuccess(res) {
       if (res.code == 0) {
-        const result = res.result;
-        this.$store.dispatch("SaveMenu", result);
-        this.$router.push("/");
-        // this.$router.push("/plantMaintenance/plantMaintenance_list");
-        // 延迟 1 秒显示欢迎信息
+        this.$router.push("/tapePublishSchedule/tapePublishSchedule_list");
         setTimeout(() => {
           this.$notification.open({
-            message: "Welcome",
-            description: `${timeFix()}，Welcome back`,
+            message: timeFix(),
+            description: "Welcome back",
             duration: 6,
             style: { background: "#52C41A" }
           });
         }, 1000);
-          setTimeout(() => {
-          this.$router.go(0);
-        }, 500);
       } else {
         this.requestFailed(res.msg);
       }
     },
-
     requestFailed(err) {
       console.log(err);
       this.$notification.open({
@@ -277,12 +178,6 @@ export default {
 .user-layout-login {
   label {
     font-size: 14px;
-  }
-
-  .getCaptcha {
-    display: block;
-    width: 100%;
-    height: 40px;
   }
 
   .forge-password {

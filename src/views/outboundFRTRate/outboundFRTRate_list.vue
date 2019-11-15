@@ -97,14 +97,19 @@
 </template>
 
 <script>
-    import moment from "moment";
-    import {STable, tableBtns} from "@/components";
-    import {del, getDropDownList, getGeoCode, list} from "@api/outboundFRTRate_api";
-    import { getXScrollSize } from "@api/publicFunc_api";
-    import langZh from "../../locales/zh-CN/outboundFRTRate_lang.js";
-    import langEn from "../../locales/en-US/outboundFRTRate_lang.js";
+import moment from "moment";
+import { STable, tableBtns } from "@/components";
+import {
+  del,
+  getDropDownList,
+  getGeoCode,
+  list
+} from "@api/outboundFRTRate_api";
+import { getXScrollSize } from "@api/publicFunc_api";
+import langZh from "../../locales/zh-CN/outboundFRTRate_lang.js";
+import langEn from "../../locales/en-US/outboundFRTRate_lang.js";
 
-    export default {
+export default {
   name: "TableList",
   components: {
     STable,
@@ -205,7 +210,7 @@
       setTimeout(() => {
         this.$store.dispatch("ToggleCloseTab", this.$route.fullPath);
         this.$router.push({
-          path: "/gLOutboundFRTByUnit_list/gLOutboundFRTByUnit"
+          path: "/gLOutboundFRTByUnit_list"
         });
       }, 500);
     },
@@ -236,7 +241,7 @@
       return (
         option.componentOptions.children[0].text
           .toLowerCase()
-            .indexOf(input.toLowerCase()) >= 0
+          .indexOf(input.toLowerCase()) >= 0
       );
     },
     setDropDownLists() {

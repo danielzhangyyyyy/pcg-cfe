@@ -22,7 +22,13 @@
                                   icon="search"
                                   :loading="searchLoading"
                                   @click="searchOnClick"
-                          >{{ $t('lang.tabComSearchButtonName') }}</a-button>
+                          >{{ $t('lang.tabComSearchButtonName') }}</a-button>&nbsp;&nbsp;&nbsp;
+                            <tableBtns
+                                    :currentPageManipulationAuth="currentPageManipulationAuth"
+                                    :queryParamemter="queryParam"
+                                    exportId="UPLOAD_MODEL_LIST"
+                                    style="display: inline-block"
+                            ></tableBtns>
                           <a-button
                                   style="margin-left: 8px"
                                   icon="undo"
@@ -34,11 +40,7 @@
             </a-form>
         </div>
 
-        <tableBtns
-                :currentPageManipulationAuth="currentPageManipulationAuth"
-                :queryParamemter="queryParam"
-                exportId="UPLOAD_MODEL_LIST"
-        ></tableBtns>
+
 
         <s-table
                 ref="table"

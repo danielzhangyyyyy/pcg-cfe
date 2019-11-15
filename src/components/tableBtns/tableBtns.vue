@@ -1,5 +1,6 @@
 <template>
   <div class="table-operator">
+    <slot v-if="extraBtnPosition=='front'"></slot>
     <a-button
       type="primary"
       icon="plus"
@@ -26,7 +27,7 @@
       @click="exportOnClick"
     >{{ $t('lang.tabComExport') }}</a-button>
     <a-button type="primary" icon="upload" v-if="Upload" @click="uploadOnClick">{{ uploadShowName }}</a-button>
-    <slot></slot>
+    <slot v-if="!extraBtnPosition||extraBtnPosition=='end'"></slot>
   </div>
 </template>
 
@@ -50,7 +51,8 @@ export default {
     "exportId",
     "queryParamemter",
     "uploadAlias",
-    "exportAlias"
+    "exportAlias",
+    "extraBtnPosition"
   ],
   computed: {
     exportShowName() {
@@ -138,7 +140,7 @@ export default {
     uploadOnClick() {
       const originalPage = this.$route.name;
       this.$router.replace({
-        path: `/upload/upload_list/${this.uploadId}/origin/${originalPage}`
+        path: `/upload/upload_list/${this.uploadId}/origin/${originalPage}/eventName/rptId` // eventName与rptId是flexReport上传需要的参数，不要删除
       });
     },
     getManipulationAuth(currentPageManipulationAuth) {

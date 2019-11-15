@@ -15,11 +15,11 @@ const tableTitle_langEn = [
         sorter: true
     },
     {
-        title: 'Template Name',
-        dataIndex: 'templateName',
+        title: 'Upload File Name',
+        dataIndex: 'uploadFilename',
         align: 'left',
         width: 300,
-        sorter: true
+        sorter: true,
     },
     {
         title: 'Success Rows',
@@ -59,11 +59,11 @@ const tableTitle_langEn = [
         sorter: true
     },
     {
-        title: 'Upload File Name',
-        dataIndex: 'uploadFilename',
+        title: 'Template Name',
+        dataIndex: 'templateName',
         align: 'left',
         width: 300,
-        sorter: true,
+        sorter: true
     },
     // {
     //     title: 'Server File Path',

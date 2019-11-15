@@ -51,9 +51,14 @@
                 currentPageManipulationAuth: ["UploadEnforced"],
                 pagination: {
                     showSizeChanger: true,
-                    hideOnSinglePage: true,
                     pageSizeOptions: ["10", "50", "100", "150"],
-                    onShowSizeChange: this.showSizeChange
+                    onShowSizeChange: this.showSizeChange,
+                    showTotal: total =>
+                        total < 2000
+                            ? total == 1
+                            ? `total ${total} row`
+                            : `total ${total} rows`
+                            : this.$t("lang.messageFor2000Records"),
                 },
                 description: "",
                 scrollSize: {y:false},
@@ -152,7 +157,7 @@
                 this.$store.dispatch("ToggleCloseTab", "");
                 setTimeout(() => {
                     this.$store.dispatch("ToggleCloseTab", this.$route.fullPath);
-                    this.$router.replace(`/costBOM/costBom_list`);
+                    this.$router.replace(`/costBom/costBom_list`);
                 }, 500);
             },
             // 更改列表数组

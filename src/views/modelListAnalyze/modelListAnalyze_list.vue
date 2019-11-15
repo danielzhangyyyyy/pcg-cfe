@@ -51,7 +51,7 @@
             <template slot="message">
                 <span style="margin-right: 12px">
                 Search Results (
-                 <a style="font-weight: 600">{{this.dataSource.length}}</a> rows totally)
+                 total <a style="font-weight: 600">{{this.dataSource.length}}</a> rows)
                 </span>
             </template>
         </a-alert>
@@ -71,7 +71,7 @@
             <template slot="message">
                 <span style="margin-right: 12px">
                 Search Results (
-                 <a style="font-weight: 600">{{this.dataSource1.length}}</a> rows totally)
+                 total <a style="font-weight: 600">{{this.dataSource1.length}}</a> rows)
                 </span>
             </template>
         </a-alert>

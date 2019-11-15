@@ -192,9 +192,15 @@
                     showSizeChanger: true,
                     // current: 1,
                     // total: 0,
-                    // pageSize: 10,
+                    pageSize: 10,
                     pageSizeOptions: ["10", "50", "100", "150"],
                     onShowSizeChange: this.showSizeChange,
+                    showTotal: total =>
+                        total < 2000
+                            ? total == 1
+                            ? `total ${total} row`
+                            : `total ${total} rows`
+                            : this.$t("lang.messageFor2000Records"),
                     // onChange: this.changePage
                 },
                 allChecked: false,
@@ -233,7 +239,7 @@
         created() {
             this.changeLanguage()
             this.scrollSize.x = getXScrollSize(this.columns, langEn.deltaSize);
-            this.getListFun({});
+            // this.getListFun({});
             this.getDropDown(
                 {moduleName: "getCycleList"},
                 this.cycleDataList,
@@ -325,27 +331,32 @@
                 let param = {
                     cycle: record.cycle,
                     mfgPlant: record.mfgPlant,
+                    productGroup: record.productGroup,
                     partNumber: record.partNumber
                 }, index = this.expandedRowKeys.indexOf(record.rid);
                 expanded ? this.expandedRowKeys.push(record.rid) : this.expandedRowKeys.splice(index, 1);
-                getPartNumList(Object.assign({}, param)).then(res => {
-                    if (res.code === '0') {
-                        record.children.splice(0);
-                        for (let item of res.result) {
-                            item.rid = record.rid + "@" + item.rid;
-                            delete item.partNumber;
+                if(expanded){
+                    getPartNumList(Object.assign({}, param)).then(res => {
+                        if (res.code === '0') {
+                            record.children.splice(0);
+                            for (let item of res.result) {
+                                item.rid = record.rid + "@" + item.rid;
+                                delete item.partNumber;
+                            }
+                            record.children = res.result;
+                        } else {
+                            this.$notification.open({
+                                message: "Search condition error:",
+                                description: res.msg,
+                                duration: 6,
+                                style: {background: "#F5222D"}
+                            });
                         }
-                        record.children = res.result;
-                    } else {
-                        this.$notification.open({
-                            message: "Search condition error:",
-                            description: res.msg,
-                            duration: 6,
-                            style: {background: "#F5222D"}
-                        });
-                    }
 
-                });
+                    });
+                }else {
+                    record.children = []
+                }
             },
             searchOnClick() {
                 this.form.validateFields((err, values) => {
@@ -361,6 +372,7 @@
                         }
                         this.expandedRowKeys.splice(0);
                         this.getListFun({});
+                        this.getMonths();
                     } else {
                         this.$notification.open({
                             message: "Search condition error:",
@@ -492,7 +504,7 @@
                 }
             },
             getMonths() {
-                getDropDownList({moduleName: "getMonthListByCycle", cycle: "CURRENT"}).then(res => {
+                getDropDownList({moduleName: "getMonthListByCycle", cycle: this.queryParam.cycle}).then(res => {
                     for (let key in res.result[0]) {
                         for (let item of this.columns) {
                             if (
@@ -581,7 +593,13 @@
                     for (let item of this.loadData) {
                         if (this.selectedRows.rid === item.rid) {
                             item.check = true;
-                            this.selectedRowKeys.push(item.rid);
+                            this.selectedRowKeys.push({
+                                rid: item.rid,
+                                mfgPlant: item.mfgPlant,
+                                partNumber: item.partNumber,
+                                productGroup: item.productGroup,
+                                cycle: item.cycle
+                            });
                         }
                         arr.push(item.check);
                     }
@@ -590,6 +608,11 @@
                     for (let item of this.loadData) {
                         this.selectedRows.rid === item.rid ? (item.check = false) : "";
                         arr.push(item.check);
+                        for(let [index,ele] of this.selectedRowKeys.entries()){
+                            if(this.selectedRows.rid === ele.rid){
+                                this.selectedRowKeys.splice(index,1)
+                            }
+                        }
                     }
                     arr.includes(false) ? (this.allChecked = false) : "";
                 }
@@ -599,11 +622,18 @@
                 if (!bool) {
                     this.allChecked = false;
                     for (let item of this.loadData) item.check = false;
+                    this.selectedRowKeys = []
                 } else {
                     this.allChecked = true;
                     for (let item of this.loadData) {
                         item.check = true;
-                        this.selectedRowKeys.push(item.rid);
+                        this.selectedRowKeys.push({
+                            rid: item.rid,
+                            mfgPlant: item.mfgPlant,
+                            partNumber: item.partNumber,
+                            productGroup: item.productGroup,
+                            cycle: item.cycle
+                        });
                     }
                 }
             },
@@ -626,7 +656,11 @@
                 const rowKeys = [];
                 this.selectedRowKeys.forEach(element => {
                     rowKeys.push({
-                        rid: element.split("@")[0]
+                        rid: element.rid,
+                        mfgPlant: element.mfgPlant,
+                        partNumber: element.partNumber,
+                        productGroup: element.productGroup,
+                        cycle: element.cycle
                     });
                 });
                 this.delfun(rowKeys);

@@ -150,18 +150,6 @@ let filter_langEn = [
     },
     {
         index: 1,
-        label: 'UI User ID',
-        decorator: 'uiUserId',
-        required: false,
-        allowClear: true,
-        editDisabled: false,
-        message: 'Please select',
-        placeHolder: 'Please select',
-        inputType: 'input',
-        text: ''
-    },
-    {
-        index: 2,
         label: 'Status',
         decorator: 'status',
         required: false,
@@ -172,6 +160,18 @@ let filter_langEn = [
         inputType: 'dropDown',
         text: 'ALL',
         dropDownList: []
+    },
+    {
+        index: 2,
+        label: 'UI User ID',
+        decorator: 'uiUserId',
+        required: false,
+        allowClear: true,
+        editDisabled: false,
+        message: 'Please select',
+        placeHolder: 'Please select',
+        inputType: 'input',
+        text: ''
     },
     {
         index: 3,

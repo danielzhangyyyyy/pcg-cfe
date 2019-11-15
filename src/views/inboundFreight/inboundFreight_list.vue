@@ -108,6 +108,10 @@
                 brandDataList: [],
                 cycleDataList: [],
                 plantDataList: [],
+                familyDataList: [],
+                subgeoDataList: [],
+                countryDataList: [],
+                tabTypeDataList: ['PERCENTAGE','US_DOLLAR'],
                 filterList: langEn.filter_langEn,
                 form: this.$form.createForm(this),
                 currentPageManipulationAuth: ["Add", "Delete", "Update", "View", "Upload"],
@@ -159,9 +163,36 @@
                 this.brandDataList,
                 "BRAND"
             );
+            this.getDropDown(
+                {moduleName: "getSubgeoList"},
+                this.subgeoDataList,
+                "SUBGEO"
+            );
             this.getMonths();
+            this.setDropDownLists();
         },
         watch: {
+            countryDataList(){
+                this.filterList.forEach(element => {
+                    if (element["decorator"] == "country") {
+                        element["dropDownList"] = ['ALL'].concat(this.countryDataList);
+                    }
+                });
+            },
+            subgeoDataList(){
+                this.filterList.forEach(element => {
+                    if (element["decorator"] == "subgeo") {
+                        element["dropDownList"] = [].concat(this.subgeoDataList);
+                    }
+                });
+            },
+            familyDataList(){
+                this.filterList.forEach(element => {
+                    if (element["decorator"] == "family") {
+                        element["dropDownList"] = ['ALL'].concat(this.familyDataList);
+                    }
+                });
+            },
             brandDataList() {
                 this.filterList.forEach(element => {
                     if (element["decorator"] == "brand") {
@@ -197,15 +228,22 @@
             }
         },
         methods: {
+            setDropDownLists() {
+                this.filterList.forEach(element => {
+                    if (element["decorator"] == "tbaType") {
+                        element["dropDownList"] = [].concat(this.tabTypeDataList);
+                    }
+                });
+            },
             getMonths() {
-                getDropDownList({moduleName: "getMonthListByCycle", cycle: "CURRENT"}).then(res => {
+                getDropDownList({moduleName: "getMonthListByCycle", cycle: this.queryParam.cycle}).then(res => {
                     for (let key in res.result[0]) {
                         for (let item of this.columns) {
                             if (
                                 item.dataIndex &&
                                 item.dataIndex.toUpperCase() === key.toUpperCase()
                             ) {
-                                item.title = `${res.result[0][key]} (%)`
+                                item.title = `${res.result[0][key]}`
                             }
                         }
                     }
@@ -219,6 +257,7 @@
                     if (!err) {
                         for(let key in values) this.queryParam[key] = values[key];
                         this.$refs.table.refresh(true);
+                        this.getMonths();
                     } else {
                         this.$notification.open({
                             message: "Search condition error:",
@@ -252,6 +291,21 @@
                         {moduleName: "getPlantByBrand",brand: value},
                         this.plantDataList,
                         "PLANT"
+                    );
+                    this.form.resetFields('family')
+                    this.familyDataList = []
+                    this.getDropDown(
+                        {moduleName: "getBizProdFByBrand",brand: value},
+                        this.familyDataList,
+                        "PROD_FAMILY"
+                    );
+                } else if(decorator === 'subgeo'){
+                    this.form.resetFields('country');
+                    this.countryDataList = [];
+                    this.getDropDown(
+                        {moduleName: "getCountryBySubgeo",subgeo: value},
+                        this.countryDataList,
+                        "COUNTRY"
                     );
                 }
             },

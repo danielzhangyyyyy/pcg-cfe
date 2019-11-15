@@ -466,7 +466,7 @@ let filter_langEn = [
         index: 1,
         label: 'Cycle',
         decorator: 'cycle',
-        required: false,
+        required: true,
         allowClear: true,
         editDisabled: false,
         message: 'Please select',

@@ -9,9 +9,11 @@ import {
   ACCESS_TOKEN
 } from '@/store/mutation-types'
 
+const CancelToken = axios.CancelToken;
+
 // 创建 axios 实例
 const service = axios.create({
-  baseURL: '/pcg/api', // api base_url
+  // baseURL: '/pcg/api', // api base_url
   timeout: 1800000 // 请求超时时间
 })
 
@@ -34,13 +36,9 @@ const err = (error) => {
         duration: 6,
         style: { 'background': '#F5222D' } //red
       })
-      if (token) {
-        store.dispatch('Logout').then(() => {
-          setTimeout(() => {
-            window.location.reload()
-          }, 1500)
-        })
-      }
+      setTimeout(() => {
+        store.dispatch('Logout')
+      }, 3000)
     }
   }
   return Promise.reject(error)
@@ -52,6 +50,7 @@ service.interceptors.request.use(config => {
   if (token) {
     config.headers['pcgcfe-java-token'] = token // 让每个请求携带自定义 token 请根据实际情况自行修改
   }
+  store.getters.baseUrl == '' ? config.baseURL = '/pcg/api' : config.baseURL = store.getters.baseUrl
   return config
 }, err)
 
@@ -69,5 +68,6 @@ const installer = {
 
 export {
   installer as VueAxios,
-  service as axios
+  service as axios,
+  CancelToken
 }

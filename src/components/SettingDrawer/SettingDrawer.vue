@@ -19,9 +19,9 @@
                 <img
                   src="https://gw.alipayobjects.com/zos/rmsportal/LCkqqYNmvBEbokSDscrm.svg"
                   alt="dark"
-                />
+                >
                 <div class="setting-drawer-index-selectIcon" v-if="navTheme === 'dark'">
-                  <a-icon type="check" />
+                  <a-icon type="check"/>
                 </div>
               </div>
             </a-tooltip>
@@ -32,9 +32,9 @@
                 <img
                   src="https://gw.alipayobjects.com/zos/rmsportal/jpRkZQMyYRryryPNtyIC.svg"
                   alt="light"
-                />
+                >
                 <div class="setting-drawer-index-selectIcon" v-if="navTheme !== 'dark'">
-                  <a-icon type="check" />
+                  <a-icon type="check"/>
                 </div>
               </div>
             </a-tooltip>
@@ -56,7 +56,7 @@
             </a-tooltip>
           </div>
         </div>
-        <a-divider />
+        <a-divider/>
 
         <div :style="{ marginBottom: '24px' }">
           <h3 class="setting-drawer-index-title">{{ $t('lang.appsettingnavigationmode') }}</h3>
@@ -67,9 +67,9 @@
                 <img
                   src="https://gw.alipayobjects.com/zos/rmsportal/JopDzEhOqwOjeNTXkoje.svg"
                   alt="sidemenu"
-                />
+                >
                 <div class="setting-drawer-index-selectIcon" v-if="layoutMode === 'sidemenu'">
-                  <a-icon type="check" />
+                  <a-icon type="check"/>
                 </div>
               </div>
             </a-tooltip>
@@ -80,9 +80,9 @@
                 <img
                   src="https://gw.alipayobjects.com/zos/rmsportal/KDNDBbriJhLwuqMoxcAr.svg"
                   alt="topmenu"
-                />
+                >
                 <div class="setting-drawer-index-selectIcon" v-if="layoutMode !== 'sidemenu'">
-                  <a-icon type="check" />
+                  <a-icon type="check"/>
                 </div>
               </div>
             </a-tooltip>
@@ -93,7 +93,7 @@
                 <a-tooltip slot="actions">
                   <template slot="title">{{ $t('lang.appsettingWorksWhenTopLayout') }}</template>
                   <a-select
-                    :getPopupContainer="getPopupContainer"
+                :getPopupContainer="getPopupContainer"
                     size="small"
                     style="width: 80px;"
                     :defaultValue="contentWidth"
@@ -156,7 +156,7 @@
             </a-list>
           </div>
         </div>
-        <a-divider />
+        <a-divider/>
 
         <div :style="{ marginBottom: '24px' }">
           <h3 class="setting-drawer-index-title">{{ $t('lang.appsettingothersettings') }}</h3>
@@ -188,7 +188,7 @@
             </a-list>
           </div>
         </div>
-        <a-divider />
+        <a-divider/>
         <div :style="{ marginBottom: '24px' }">
           <a-button @click="doCopy" icon="copy" block>{{ $t('lang.appsettingcopy') }}</a-button>
           <!--   <a-alert type="warning" :style="{ marginTop: '24px' }">
@@ -203,25 +203,24 @@
         </div>
       </div>
       <div class="setting-drawer-index-handle" @click="toggle">
-        <a-icon type="setting" v-if="!visible" />
-        <a-icon type="close" v-else />
+        <a-icon type="setting" v-if="!visible"/>
+        <a-icon type="close" v-else/>
       </div>
     </a-drawer>
   </div>
 </template>
 
 <script>
-import config from "@/config/defaultSettings";
-import {
-  colorList,
-  colorListEn,
-  updateColorWeak,
-  updateTheme
-} from "./settingConfig";
-import { mixin, mixinDevice } from "@/utils/mixin";
+    import {DetailList} from "@/components";
+    import config from "@/config/defaultSettings";
+    import {colorList, colorListEn, updateColorWeak, updateTheme} from "./settingConfig";
+    import {mixin, mixinDevice} from "@/utils/mixin";
 
-export default {
-  components: {},
+    export default {
+  components: {
+    // DetailList,
+    // SettingItem
+  },
   mixins: [mixin, mixinDevice],
   data() {
     return {
@@ -265,7 +264,7 @@ export default {
       updateColorWeak(this.colorWeak);
     }
   },
-  methods: {
+    methods: {
     getPopupContainer(trigger) {
       return trigger.parentElement;
     },
@@ -294,10 +293,14 @@ export default {
     },
     doCopy() {
       const text = `export default {
-  primaryColor: '${this.baseConfig.primaryColor}', // primary color of ant design
+  primaryColor: '${
+    this.baseConfig.primaryColor
+  }', // primary color of ant design
   navTheme: '${this.baseConfig.navTheme}', // theme for nav menu
   layout: '${this.baseConfig.layout}', // nav menu position: sidemenu or topmenu
-  contentWidth: '${this.baseConfig.contentWidth}', // layout of content: Fluid or Fixed, only works when layout is topmenu
+  contentWidth: '${
+    this.baseConfig.contentWidth
+  }', // layout of content: Fluid or Fixed, only works when layout is topmenu
   fixedHeader: ${this.baseConfig.fixedHeader}, // sticky header
   fixSiderbar: ${this.baseConfig.fixSiderbar}, // sticky siderbar
   autoHideHeader: ${this.baseConfig.autoHideHeader}, //  auto hide header
@@ -306,7 +309,7 @@ export default {
   production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true',
   // vue-ls options
   storageOptions: {
-    namespace: 'pro__',
+    namespace: 'pcg__',
     name: 'ls',
     storage: 'local',
   }

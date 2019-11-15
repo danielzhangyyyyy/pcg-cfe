@@ -115,17 +115,10 @@
       :columns="columns"
       :loading="loading"
       :scroll="{ x: 1200 }"
-      size="default"
+      size="small"
       :rowKey="(record) => record.rid"
       :data="loadData"
       :alert="options.alert"
-      :customRow="(record) => { return {
-                    on:{
-                      dblclick:(record)=>{
-                        // this.doubleClickOnRow(record,true)
-                      }
-                    }
-                  }}"
       :rowSelection="options.rowSelection"
     ></s-table>
   </a-card>
@@ -173,16 +166,6 @@ export default {
       // 表头
       columns: [],
       loadData: "",
-      // 加载数据方法 必须为 Promise 对象
-      // loadData: parameter => {
-      //   console.log('loadData.parameter', parameter)
-      //   return list(Object.assign(parameter, this.queryParam))
-      //     .then(res => {
-      //       console.log(res.result)
-      //       return res.result
-      //     })
-      // },
-      // custom table alert & rowSelection
       options: {
         alert: {
           show: true,
@@ -236,8 +219,8 @@ export default {
     },
     $route: {
       handler(route) {
-        console.log(route.path);
-        if (route.path === "/basicNameMaintain/basicNameMaintain_list") {
+          console.log(route,2222)
+        if (route.path === "/filteredSBBBOMStructure/basicNameMaintain_list") {
           this.handleOk();
         }
       },
@@ -474,6 +457,7 @@ export default {
     },
     // 刷新列表
     handleOk() {
+        // debugger;
       this.$refs.table.refresh(); // refresh() 不传参默认值 false 不刷新到分页第一页，true刷新到第一页
     },
 

@@ -269,9 +269,7 @@
                 return trigger.parentElement;
             },
             searchOnClick() {
-                // this.$refs.table.refresh(true);
                 this.form.validateFields((err, values) => {
-                    console.log("err", err);
                     console.log("values", values);
                     this.historyStatus = values.cycle
                     if (!err) {
@@ -279,6 +277,7 @@
                             this.queryParam[key] = values[key]
                         }
                         this.$refs.table.refresh(true);
+                        this.getMonths()
                     } else {
                         this.$notification.config({
                             duration: 5
@@ -316,7 +315,7 @@
                 if (decorator === "brand") {
                     this.form.resetFields(["prodfamily"]);
                     this.bizProdDataList = [];
-                    if(value){
+                    if (value) {
                         this.getDropDown(
                             {moduleName: "getProductFamilyByBrand", brand: value},
                             this.bizProdDataList,
@@ -333,7 +332,7 @@
                 }
             },
             getMonths() {
-                getDropDownList({moduleName: 'getMonthListByCycle', cycle: 'CURRENT'}).then(res => {
+                getDropDownList({moduleName: 'getMonthListByCycle', cycle: this.queryParam.cycle}).then(res => {
                     for (let key in res.result[0]) {
                         for (let item of this.columns) {
                             if (item.dataIndex && item.dataIndex.toUpperCase() === key.toUpperCase()) {
@@ -345,17 +344,13 @@
             },
             getListFun() {
                 const that = this
-                // const value = this.queryParam
                 that.loadData = parameter => {
                     that.searchLoading = true;
-                    console.log('loadData.parameter', parameter)
-                    return list(Object.assign(parameter, that.queryParam))
-                        .then(res => {
-                            console.log(res.result)
-                            that.searchLoading = false;
-                            that.$refs.table.clearSelected();
-                            return res.result
-                        })
+                    return list(Object.assign(parameter, that.queryParam)).then(res => {
+                        that.searchLoading = false;
+                        that.$refs.table.clearSelected();
+                        return res.result
+                    })
                 }
             },
             handleSubmit(e) {
@@ -391,7 +386,6 @@
             },
             editSelectOne() { // 修改选中行
                 const selectedRowKeyslen = this.selectedRowKeys.length
-                console.log(selectedRowKeyslen)
                 if (selectedRowKeyslen == 1) {
                     if (this.historyStatus != "CURRENT") {
                         this.$notification.open({

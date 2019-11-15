@@ -226,7 +226,7 @@
             language(val) {
                 this.changeLanguage()
             },
-            '$route': {
+            $route: {
                 handler(route) {
                     console.log(route.path)
                     if (route.path === '/filteredSBBBomStructure/filteredSBBBomStructure_list') {

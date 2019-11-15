@@ -28,7 +28,7 @@ const tableTitle_langEn = [
     },
     {
         title: 'Export Time',
-        dataIndex: 'startTime',
+        dataIndex: 'endTime',
         align: 'left',
         width: 160,
         sorter: true,

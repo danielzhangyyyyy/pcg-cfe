@@ -454,32 +454,32 @@ let filter_langEn = [
         text: '',
         dropDownList: []
     },
-    {
-        index: 3,
-        label: 'Brand',
-        decorator: 'brand',
-        required: false,
-        allowClear: true,
-        editDisabled: false,
-        message: 'Please select',
-        placeHolder: 'Please select',
-        inputType: 'dropDown',
-        text: '',
-        dropDownList: []
-    },
-    {
-        index: 4,
-        label: 'Product Family',
-        decorator: 'aspPrdFamily',
-        required: false,
-        allowClear: true,
-        editDisabled: false,
-        message: 'Please select',
-        placeHolder: 'Please select',
-        inputType: 'dropDown',
-        text: '',
-        dropDownList: []
-    }
+    // {
+    //     index: 3,
+    //     label: 'Brand',
+    //     decorator: 'brand',
+    //     required: false,
+    //     allowClear: true,
+    //     editDisabled: false,
+    //     message: 'Please select',
+    //     placeHolder: 'Please select',
+    //     inputType: 'dropDown',
+    //     text: '',
+    //     dropDownList: []
+    // },
+    // {
+    //     index: 4,
+    //     label: 'Product Family',
+    //     decorator: 'aspPrdFamily',
+    //     required: false,
+    //     allowClear: true,
+    //     editDisabled: false,
+    //     message: 'Please select',
+    //     placeHolder: 'Please select',
+    //     inputType: 'dropDown',
+    //     text: '',
+    //     dropDownList: []
+    // }
 ]
 
 export default {

@@ -6,7 +6,7 @@ const api = {
     add: 'purBreakDownOri/add',
     update: 'purBreakDownOri/update',
     delete: 'purBreakDownOri/delete',
-    commonList: 'common/getCommonList',
+    commonList: 'common/getCommonListByPG',
     findPartNumList: 'purBreakDownOri/findPartNumList',
     findCommElemList: 'purBreakDownOri/findCommElemList'
 }

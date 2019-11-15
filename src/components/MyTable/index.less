@@ -1,0 +1,28 @@
+.myCard {
+  overflow: scroll;
+}
+
+.myTable {
+  border: 1px solid #dddddd;
+
+  tr {
+    border: 1px solid #dddddd;
+    th {
+      height: inherit;
+      display: inline-block;
+      line-height: 40px;
+      border-right: 1px solid #dddddd;
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+
+    td {
+      height: inherit;
+      display: inline-block;
+      word-wrap: break-word;
+    }
+  }
+}
+

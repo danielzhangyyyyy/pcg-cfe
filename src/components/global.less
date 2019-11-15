@@ -20,7 +20,7 @@ body {
 .ant-table td {
   max-width: 1px;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: pre;
   overflow: hidden;
 }
 
@@ -466,6 +466,7 @@ body {
 
     .ant-menu-light {
       border-right-color: transparent;
+      color: rgb(0, 0, 0)
     }
   }
 }
@@ -501,7 +502,7 @@ body {
   .ant-form-inline {
     .ant-form-item {
       display: flex;
-      margin-bottom: 24px;
+      margin-bottom: 10px;
       margin-right: 0;
 
       .ant-form-item-control-wrapper {
@@ -525,14 +526,14 @@ body {
 
   .table-page-search-submitButtons {
     display: block;
-    margin-bottom: 24px;
+    margin-bottom: 10px;
     white-space: nowrap;
   }
 }
 
 .content {
   .table-operator {
-    margin-bottom: 18px;
+    margin-bottom: 10px;
 
     button {
       margin-right: 8px;
@@ -540,6 +541,17 @@ body {
   }
 }
 
+body {
+  :global {
+    .ant-table-thead > tr > th {
+      color: rgba(0, 0, 0);
+    }
+
+    table {
+      color: rgba(0, 0, 0);
+    }
+  }
+}
 /* body {
   :global {
     .ant-table-tbody > tr:nth-child(2n) {
@@ -606,7 +618,8 @@ body {
 }
 
 .ant-menu-item > div > a {
-  color: rgba(0, 0, 0, 0.65);
+  // color: rgba(0, 0, 0, 0.65);
+  color: rgba(0, 0, 0);
 }
 
 .ant-menu-item > div > a:hover {

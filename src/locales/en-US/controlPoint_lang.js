@@ -1,100 +1,120 @@
 import commonWidth from "./columnCommonWidth_lang.js"
-
 const deltaSize = commonWidth.deltaSize
 // list页面表头
 const tableTitle_langEn1 = [
     {
+        fixed: 'left',
+    },
+    {
         title: 'Control Point',
         dataIndex: 'controlPoint',
         align: 'left',
-        width: commonWidth.controlPoint, //have sub-level, need specific size
+        width: 100,
+    },
+    {
+        title: 'Cycle Name',
+        dataIndex: 'cycleName',
+        align: 'left',
+        width: commonWidth.cycle,
+        // sorter: true
     },
     {
         title: 'Status',
         dataIndex: 'controlPointStatus',
         align: 'left',
-        width: commonWidth.status,
+        width: commonWidth.taskQstatus,
         // sorter: true
     },
     {
         title: 'Last Update Date',
         dataIndex: 'sysLastModifiedDate',
-        align: 'right',
+        align: 'left',
         width: commonWidth.sysLastModifiedDate,
-        // sorter: true
-    },
-    {
-        title: 'Instance ID',
-        dataIndex: 'instanceId',
-        align: 'right',
-        width: commonWidth.instanceId,
         // sorter: true
     },
     {
         title: 'Workflow Status',
         dataIndex: 'workflowStatus',
-        align: 'right',
-        width: commonWidth.status,
+        align: 'left',
+        width: commonWidth.taskQstatus,
         // sorter: true
-    },
-    ,
+    },  
     {
-        title: 'Cycle Name',
-        dataIndex: 'cycleName',
-        align: 'right',
-        width: commonWidth.cycle,
+        title: 'Instance ID',
+        dataIndex: 'instanceId',
+        align: 'left',
+        width: 110,
         // sorter: true
     },
     {
         title: 'Operation',
         dataIndex: 'operation',
-        align: 'left',
-        width: commonWidth.operation,
+        align: 'center',
+        width: 140,
         scopedSlots: {customRender: "operation"}
         // sorter: true
-    }
+    },
 ]
 
 const tableTitle_langEn5 = [
+    // {
+    //     title: 'Operation',
+    //     dataIndex: 'operation',
+    //     align: 'center',
+    //     width: 140,
+    //     scopedSlots: {customRender: "operation"}
+    //     // sorter: true
+    // },
     {
         title: 'Control Point',
         dataIndex: 'controlPoint',
         align: 'left',
-        width: 160, //have sub-level, need specific size
+        width: 150, 
     },
     {
         title: 'Status',
         dataIndex: 'controlPointStatus',
         align: 'left',
-        width: 200,
+        width: commonWidth.taskQstatus,
         // sorter: true
     },
     {
         title: 'Last Update Date',
         dataIndex: 'sysLastModifiedDate',
-        align: 'right',
-        width: 300,
-        // sorter: true
-    },
-    {
-        title: 'Instance ID',
-        dataIndex: 'instanceId',
-        align: 'right',
-        width: 300,
+        align: 'left',
+        width: commonWidth.sysLastModifiedDate,
         // sorter: true
     },
     {
         title: 'Workflow Status',
         dataIndex: 'workflowStatus',
-        align: 'right',
+        align: 'left',
+        width: commonWidth.taskQstatus,
+        // sorter: true
+    },
+    {
+        title: 'Instance ID',
+        dataIndex: 'instanceId',
+        align: 'left',
         width: 300,
         // sorter: true
-    }
+    },
 ]
 
 let filter_langEn = [
     {
         index: 0,
+        label: 'Cycle Name',
+        decorator: 'cycleName',
+        required: false,
+        allowClear: true,
+        message: 'Please input',
+        placeHolder: 'Please input',
+        inputType: 'input',
+        text: ''
+    },
+    {
+        index: 1,
         label: 'Cycle Type',
         decorator: 'cycleType',
         required: false,
@@ -104,17 +124,6 @@ let filter_langEn = [
         inputType: 'dropDown',
         text: 'FINAL',
         dropDownList: []
-    },
-    {
-        index: 1,
-        label: 'Cycle Name',
-        decorator: 'cycleName',
-        required: false,
-        allowClear: true,
-        message: 'Please input',
-        placeHolder: 'Please input',
-        inputType: 'input',
-        text: ''
     },
     {
         index: 2,

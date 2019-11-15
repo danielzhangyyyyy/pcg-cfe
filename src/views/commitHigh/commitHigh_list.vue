@@ -121,13 +121,6 @@
                 :rowKey="(record) => record.rid"
                 :data="loadData"
                 :alert="options.alert"
-                :customRow="(record) => { return {
-                    on:{
-                      dblclick:(record)=>{
-                        // this.doubleClickOnRow(record,true)
-                      }
-                    }
-                  }}"
                 :rowSelection="options.rowSelection">
         </s-table>
     </a-card>
@@ -167,16 +160,6 @@
                 columns: [],
                 loadData: '',
                 scrollSize: {},
-                // 加载数据方法 必须为 Promise 对象
-                // loadData: parameter => {
-                //   console.log('loadData.parameter', parameter)
-                //   return list(Object.assign(parameter, this.queryParam))
-                //     .then(res => {
-                //       console.log(res.result)
-                //       return res.result
-                //     })
-                // },
-                // custom table alert & rowSelection
                 options: {
                     alert: {
                         show: true, clear: () => {
@@ -248,7 +231,7 @@
                 return trigger.parentElement;
             },
             getMonths() {
-                getDropDownList({moduleName: 'getMonthListByCycle', cycle: 'CURRENT'}).then(res => {
+                getDropDownList({moduleName: 'getMonthListByCycle', cycle: this.queryParam.cycle}).then(res => {
                     for (let key in res.result[0]) {
                         for (let item of this.columns) {
                             if (item.dataIndex && item.dataIndex.toUpperCase() === key.toUpperCase()) {
@@ -259,15 +242,13 @@
                 });
             },
             searchOnClick() {
-                // this.$refs.table.refresh(true);
                 this.form.validateFields((err, values) => {
-                    // console.log("err", err);
-                    // console.log("values", values);
                     if (!err) {
                         for (let key in values) {
                             key === 'partNumber' && values[key] !== undefined ? this.queryParam[key] = '%' + values[key].trim() + '%' : key === 'dummyPart' && values[key] !== undefined ? this.queryParam[key] = '%' + values[key].trim() + '%' : this.queryParam[key] = values[key]
                         }
                         this.$refs.table.refresh(true);
+                        this.getMonths();
                     } else {
                         this.$notification.config({
                             duration: 5

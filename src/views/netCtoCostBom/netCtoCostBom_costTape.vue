@@ -26,7 +26,9 @@
                 @change="handleTableChange"
                 :style="{'padding-top': '1px'}"
                 :rowClassName="rowClassName"
-        ></a-table>
+        >
+            <span slot="convert" slot-scope="text">{{text|convert}}</span>
+        </a-table>
     </a-card>
 </template>
 
@@ -49,7 +51,7 @@
                 loading: false, // 页面是否加载中
                 queryParam: {}, // 查询参数
                 columns: [], // 表头
-                pagination: {showSizeChanger: true, hideOnSinglePage: true},
+                pagination: {showSizeChanger: true},
                 part: '',
                 plant: '',
                 scrollSize: {},

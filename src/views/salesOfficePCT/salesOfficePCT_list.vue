@@ -127,7 +127,7 @@ export default {
       pagination: {
         showSizeChanger: true,
         pageSizeOptions: ["10", "50", "100", "150"],
-        showTotal: total => total == 1 ? `${total} row totally` : `${total} rows totally`,
+        showTotal: total => total == 1 ? `total ${total} row` : `total ${total} rows`,
       },
       scrollSize: {},
     };

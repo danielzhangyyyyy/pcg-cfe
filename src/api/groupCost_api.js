@@ -6,7 +6,7 @@ const api = {
   add: 'groupCost/add',
   update: 'groupCost/update',
   delete: 'groupCost/delete',
-  commonList: 'common/getCommonList',
+  commonList: 'common/getCommonListByPG',
   getGroupType: 'groupCost/getGroupType',
 }
 

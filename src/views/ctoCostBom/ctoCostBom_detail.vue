@@ -1,5 +1,5 @@
 <template>
-    <a-card :bordered="false" class="content">
+    <a-card :bordered="false" class="content ctoCostBom">
         <a-alert style="margin-bottom: 16px;padding: 15px 15px;">
             <template slot="message">
                 <span>
@@ -21,14 +21,16 @@
                 :pagination="false"
                 :loading="loading"
                 @change="handleTableChange"
-                :style="{'padding-top': '1px'}"
                 :rowClassName="rowClassName"
         >
-          <span slot="sbb" slot-scope="text, record">
-            <a @click="partOnClick(record, text)" :class="{visitedPart: visitedKey.indexOf(text) != -1}">
-                {{ text }}
-            </a>
-          </span>
+            <template>
+                <span slot="convert" slot-scope="text">{{text|convert}}</span>
+                <span slot="sbb" slot-scope="text, record">
+                    <a @click="partOnClick(record, text)" :class="{visitedPart: visitedKey.indexOf(text) != -1}">
+                        {{ text }}
+                    </a>
+                </span>
+            </template>
         </a-table>
 
         <a-table
@@ -43,6 +45,7 @@
                 :style="{'padding-top': '40px'}"
                 :rowClassName="rowClassName"
         >
+            <span slot="convert" slot-scope="text">{{text|convert}}</span>
         </a-table>
 
     </a-card>
@@ -50,7 +53,7 @@
 
 <script>
     import {detail, getDropDownList, list} from "@api/ctoCostBom_api";
-    import { getXScrollSize } from "@api/publicFunc_api";
+    import {getXScrollSize} from "@api/publicFunc_api";
     import langZh from "../../locales/zh-CN/ctoCostBom_lang.js";
     import langEn from "../../locales/en-US/ctoCostBom_lang.js";
 
@@ -66,7 +69,7 @@
                 columns: [], // 表头
                 columns1: [],
                 visitedKey: [],
-                pagination: {showSizeChanger: true, hideOnSinglePage: true},
+                pagination: {showSizeChanger: true},
                 title: {
                     sbb: '',
                     plant: '',
@@ -83,8 +86,8 @@
         },
         created() {
             this.changeLanguage();
-            this.scrollSize.x = getXScrollSize(this.columns,0);
-            this.scrollSize1.x = getXScrollSize(this.columns1,0);
+            this.scrollSize.x = getXScrollSize(this.columns, 0);
+            this.scrollSize1.x = getXScrollSize(this.columns1, 0);
             this.visitedKey.length = 0;
             this.loadData({});
             this.getMonths(this.columns);
@@ -205,7 +208,7 @@
                 this.$store.dispatch("ToggleCloseTab", "");
                 setTimeout(() => {
                     this.$store.dispatch("ToggleCloseTab", this.$route.fullPath);
-                    this.$router.replace(`/ctoCostBOM/ctoCostBom_list`);
+                    this.$router.replace(`/ctoCostBom/ctoCostBom_list`);
                 }, 500);
             },
             rowClassName(record, index) {

@@ -363,16 +363,29 @@
             },
             getListFun() {
                 const that = this;
-                // const value = this.queryParam
                 that.loadData = parameter => {
-                    that.searchLoading = true;
-                    console.log("loadData.parameter", parameter);
-                    return list(Object.assign(parameter, that.queryParam)).then(res => {
-                        console.log(res.result);
-                        that.searchLoading = false;
-                        that.$refs.table.clearSelected();
-                        return res.result;
-                    });
+                    if(this.queryParam.partNumber||this.queryParam.dummyPart||this.queryParam.commodity||this.queryParam.owner){
+                        that.searchLoading = true;
+                        return list(Object.assign(parameter, that.queryParam)).then(res => {
+                            console.log(res.result);
+                            that.searchLoading = false;
+                            that.$refs.table.clearSelected();
+                            return res.result;
+                        });
+                    } else {
+                        return new Promise((resolve, reject) => {
+                            that.searchLoading = false
+                            resolve({
+                                list: [],
+                                total: 0,
+                                pageNum: 0,
+                                pageSize: 0
+                            })
+                        }).then(res=>{
+                            return res
+                        })
+                    }
+
                 };
             },
             // 选择列表

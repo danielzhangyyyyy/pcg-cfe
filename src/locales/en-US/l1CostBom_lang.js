@@ -102,13 +102,6 @@ const tableTitle_langEn = [
         sorter: true
     },
     {
-        title: 'costPlant',
-        dataIndex: 'costPlant',
-        align: 'left',
-        width: 300,
-        sorter: true
-    },
-    {
         title: 'costType',
         dataIndex: 'costType',
         align: 'left',
@@ -433,6 +426,13 @@ const tableTitle_langEn = [
     {
         title: 'currencyName',
         dataIndex: 'currencyName',
+        align: 'left',
+        width: 300,
+        sorter: true
+    },
+    {
+        title: 'costPlant',
+        dataIndex: 'costPlant',
         align: 'left',
         width: 300,
         sorter: true

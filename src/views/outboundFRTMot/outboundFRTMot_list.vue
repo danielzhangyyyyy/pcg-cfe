@@ -97,14 +97,19 @@
 </template>
 
 <script>
-    import moment from "moment";
-    import {STable, tableBtns} from "@/components";
-    import {del, getDropDownList, getGeoCode, list} from "@api/outboundFRTMot_api";
-    import { getXScrollSize } from "@api/publicFunc_api";
-    import langZh from "../../locales/zh-CN/outboundFRTMot_lang.js";
-    import langEn from "../../locales/en-US/outboundFRTMot_lang.js";
+import moment from "moment";
+import { STable, tableBtns } from "@/components";
+import {
+  del,
+  getDropDownList,
+  getGeoCode,
+  list
+} from "@api/outboundFRTMot_api";
+import { getXScrollSize } from "@api/publicFunc_api";
+import langZh from "../../locales/zh-CN/outboundFRTMot_lang.js";
+import langEn from "../../locales/en-US/outboundFRTMot_lang.js";
 
-    export default {
+export default {
   name: "TableList",
   components: {
     STable,
@@ -194,7 +199,7 @@
     prodFamilyDataList() {
       this.filterList.forEach(element => {
         if (element["decorator"] == "prodFamily") {
-          element["dropDownList"] = ['ALL'].concat(this.prodFamilyDataList);
+          element["dropDownList"] = ["ALL"].concat(this.prodFamilyDataList);
         }
       });
     },
@@ -221,7 +226,7 @@
       setTimeout(() => {
         this.$store.dispatch("ToggleCloseTab", this.$route.fullPath);
         this.$router.push({
-          path: "/gLOutboundFRTByUnit_list/gLOutboundFRTByUnit"
+          path: "/gLOutboundFRTByUnit_list"
         });
       }, 500);
     },
@@ -252,7 +257,7 @@
       return (
         option.componentOptions.children[0].text
           .toLowerCase()
-            .indexOf(input.toLowerCase()) >= 0
+          .indexOf(input.toLowerCase()) >= 0
       );
     },
     setDropDownLists() {
@@ -282,13 +287,13 @@
         );
         this.form.resetFields(["prodFamily"]);
         this.prodFamilyDataList = [];
-        if(value!==undefined){
-            this.getDropDown(
-                { moduleName: "getBizProdFByBrand", brand: value },
-                this.prodFamilyDataList,
-                "PROD_FAMILY",
-                getDropDownList
-            );
+        if (value !== undefined) {
+          this.getDropDown(
+            { moduleName: "getBizProdFByBrand", brand: value },
+            this.prodFamilyDataList,
+            "PROD_FAMILY",
+            getDropDownList
+          );
         }
       } else if (decorator === "geoType") {
         this.form.resetFields(["geo"]);

@@ -218,6 +218,7 @@
                     if (!err) {
                         for (let key in values) this.queryParam[key] = values[key];
                         this.$refs.table.refresh(true);
+                        this.getMonths();
                     } else {
                         this.$notification.open({
                             message: "Search condition error:",
@@ -262,7 +263,7 @@
                 }
             },
             getMonths() {
-                getDropDownList({moduleName: 'getMonthListByCycle', cycle: 'CURRENT'}).then(res => {
+                getDropDownList({moduleName: 'getMonthListByCycle', cycle: this.queryParam.cycle}).then(res => {
                     for (let key in res.result[0]) {
                         for (let item of this.columns) {
                             if (item.dataIndex && item.dataIndex.toUpperCase() === key.toUpperCase()) {

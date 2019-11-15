@@ -91,7 +91,8 @@ module.exports = {
         port: 8000,
         proxy: {
             '/pcg/socket/*': {
-                target: 'ws://10.122.48.110:8180',
+                // target: 'ws://127.0.0.1:8180',
+                target: 'http://10.112.28.146:8180', //guagndong
                 ws: true,
                 changeOrigin: true,
                 secure: false,
@@ -102,11 +103,11 @@ module.exports = {
             '/pcg/api': {
                 // target: 'http://cfe-tst.lenovo.com/pcg/api',
                 target: 'http://10.122.48.110:8180',
-                // target: 'http://10.112.28.146:8180', //guagndong
+                //target: 'http://10.112.28.146:8180', //guagndong
                 // target: 'http://10.112.9.67:8180', //tongpan
-                // target: 'http://10.112.75.116:8180', //xiufang
+                //  target: 'http://10.112.75.116:8180', //xiufang
                 // target: 'http://10.112.53.192:8180',//xiangyue
-                // target: 'http://10.112.73.179:8180',//zhenpu
+                // target: 'http://10.112.65.147:8180',//zhenpu
                 // target: 'http://127.0.0.1:8180',
                 ws: false,
                 changeOrigin: true,

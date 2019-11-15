@@ -47,7 +47,7 @@
       uploadId="UPLOAD_ONDEMAND_REFRESH_MODEL"
       exportId="EXPORT_ONDEMAND_REFRESH"
     >
-      <a-button type="primary" icon="download" @click="exportExcelOnClick">Export</a-button>
+      <!--<a-button type="primary" icon="download" @click="exportExcelOnClick">Export</a-button>-->
       <a-button type="primary" @click="searchOnClick" :loading="searchLoading" icon="search">Search</a-button>
       <a-button
         type="primary"
@@ -102,8 +102,13 @@
       scrollSize: {},
       pagination: {
         showSizeChanger: true,
-        hideOnSinglePage: true,
-        pageSizeOptions: ["10", "50", "100", "150"]
+        pageSizeOptions: ["10", "50", "100", "150"],
+        showTotal: total =>
+                        total < 2000
+                            ? total == 1
+                            ? `total ${total} row`
+                            : `total ${total} rows`
+                            : this.$t("lang.messageFor2000Records"),
       },
       searchLoading: false,
       loading: false, // 页面是否加载中

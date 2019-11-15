@@ -6,7 +6,7 @@ const api = {
   add: 'markupUpload/add',
   update: 'markupUpload/update',
   delete: 'markupUpload/delete',
-  commonList: 'common/getCommonList',
+  commonList: 'common/getCommonListByPG',
     searchCommodityTypeList:'/markupUpload/getCommodityType'
 }
 

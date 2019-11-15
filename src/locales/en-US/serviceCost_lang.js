@@ -116,7 +116,21 @@ const tableTitle_langEn = [
         align: 'right',
         width: commonWidth.m,
         sorter: true
-    }
+    },
+    {
+        title: 'Last Modified By',
+        dataIndex: 'sysLastModifiedBy',
+        align: 'left',
+        width: commonWidth.sysLastModifiedBy,
+        sorter: true
+    },
+    {
+        title: 'Last Modified Date',
+        dataIndex: 'sysLastModifiedDate',
+        align: 'left',
+        width: commonWidth.sysLastModifiedDate,
+        sorter: true
+    },
 ]
 
 //edit页面

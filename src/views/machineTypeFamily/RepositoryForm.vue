@@ -70,11 +70,6 @@
     this.editSelectKey = Vue.ls.get("machineTypeFamily_editSelectKey");
     console.log(this.editSelectKey);
     this.getDetailfun(this.editSelectKey);
-    getDropDown(
-      { moduleName: "getProductFamilyList" },
-      this.productFamilyDropDownList,
-      "productFamily"
-    );
     getProductTypeDropDownList({})
       .then(res => {
         this.ProductTypeDropdownList.length = 0;

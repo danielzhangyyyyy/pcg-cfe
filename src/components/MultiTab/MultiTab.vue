@@ -46,6 +46,10 @@ export default {
       this[action](targetKey);
     },
     remove(targetKey) {
+      this.$store.dispatch("ToggleCloseTab", "");
+      setTimeout(() => {
+        this.$store.dispatch("ToggleRemovePage", targetKey);
+      }, 500);
       this.pages = this.pages.filter(page => page.fullPath !== targetKey);
       this.fullPathList = this.fullPathList.filter(path => path !== targetKey);
       // 判断当前标签是否关闭，若关闭则跳转到最后一个还存在的标签页

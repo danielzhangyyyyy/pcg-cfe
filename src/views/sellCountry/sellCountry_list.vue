@@ -92,6 +92,10 @@
                 icon="undo"
                 @click="() => {form.resetFields()}"
               >{{ $t('lang.tabComResetButtonName') }}</a-button>
+                <a @click="toggleAdvanced" style="margin-left: 8px">
+                {{ advanced ? $t('lang.tabComToggleCloseName') : $t('lang.tabComToggleShowName') }}
+                <a-icon :type="advanced ? 'up' : 'down'"/>
+              </a>
             </span>
           </a-col>
         </a-row>
@@ -144,7 +148,7 @@
       searchLoading: false,
       mdl: {},
       loading: false, // 页面是否加载中
-      advanced: true, // 高级搜索 展开/关闭
+      advanced: false, // 高级搜索 展开/关闭
       queryParam: {}, // 查询参数
       optionAlertShow: true, // 是否显示选择框
       selectedRowKeys: [], // 选中的行的keys数组

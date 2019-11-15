@@ -51,6 +51,7 @@
             $route: {
                 handler(route) {
                     if (route.path === "/taskQueue/instance_id") {
+                        this.dataSource = []
                         this.fetchData({instanceId: this.$route.query.id})
                     }
                 },
@@ -133,7 +134,6 @@
             },
             eventBack() {
                 this.$route.query.id = ''
-                this.dataSource = []
                 this.$store.dispatch('ToggleCloseTab', '')
                 setTimeout(() => {
                     this.$store.dispatch('ToggleCloseTab', this.$route.fullPath);

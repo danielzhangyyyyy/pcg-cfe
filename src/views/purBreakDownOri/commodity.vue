@@ -30,12 +30,14 @@
             <a-button style="margin-left: 10px;" type="primary" @click="eventPush"><a-icon type="rollback"/>Return</a-button>
         </tableBtns>
         <a-table
+                ref="table"
+                size="small"
                 :pagination="pagination"
                 :scroll="{y:scrollY}"
                 :columns="columns"
                 :dataSource="dataSource"
                 :rowKey="(record) => record.rid"
-                bordered>
+                >
         </a-table>
     </a-card>
 </template>
@@ -47,19 +49,27 @@
     import AFormItem from "ant-design-vue/es/form/FormItem";
 
     const columns = [
+        // {
+        //     fixed:'left',
+        //     width: 0
+        // },
         {
             title: "Commodity",
             dataIndex: "commodity",
+            fixed:'left',
+            align: "left",
             width: 250
         },
         {
             title: "Key Commodity",
             dataIndex: "keyComm",
+            align: "left",
             width: 250
         },
         {
             title: "Cost Element",
             dataIndex: "costElement",
+            align: "left",
             width: 250
         }
     ];
@@ -79,6 +89,7 @@
                     total: 0,
                     pageSize: 10,
                     pageSizeOptions: ["10", "50", "100", "150"],
+                    showTotal: total => total == 1 ? `total ${total} row` : `total ${total} rows`,
                     onShowSizeChange: this.showSizeChange,
                     onChange: this.changePage
                 },

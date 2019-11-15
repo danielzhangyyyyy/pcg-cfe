@@ -231,25 +231,34 @@
               uiAction: 'SBB_COMPONENT_FILTER',
               uiName: 'sBBComponentFilter'
           },self = this;
-          filterSBB(params).then(res=>{
-              if(res.code === '0'){
-                  self.$notification.open({
-                      message: "Success",
-                      description: res.msg,
-                      duration: 6,
-                      style: {background: "#52C41A"}
-                  });
-              }else {
-                  self.$notification.open({
-                      message: "Error",
-                      description: res.msg,
-                      duration: 6,
-                      style: {'background': '#F5222D'}
-                  });
-              }
-          }).catch(err=>{
-              console.log(err);
-          })
+          this.$confirm({
+              title: self.$t("lang.messageConfirmTitle"),
+              content: 'Are you sure to execute?',
+              onOk() {
+                  self.executeLoading = true;
+                  filterSBB(params).then(res=>{
+                      if(res.code === '0'){
+                          self.$notification.open({
+                              message: "Success",
+                              description: res.msg,
+                              duration: 6,
+                              style: {background: "#52C41A"}
+                          });
+                      }else {
+                          self.$notification.open({
+                              message: "Error",
+                              description: res.msg,
+                              duration: 6,
+                              style: {'background': '#F5222D'}
+                          });
+                      }
+                  }).catch(err=>{
+                      console.log(err);
+                  })
+              },
+              onCancel() {}
+          });
+
       },
     eventPush() {
       this.$router.push("/sBBComponentFilter/BasicNameList");

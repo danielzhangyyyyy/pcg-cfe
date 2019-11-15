@@ -89,12 +89,13 @@ const user = {
         })
       })
     },
+
     setProdcutGroup({ commit }, productGroup) {
       commit('SET_PRODUCTGROUP', productGroup);
     },
     GetUserInfo({ commit }, data) {
       return new Promise(resolve => {
-        let { loginName, itCode } = data
+        let { loginName, itcode } = data
         if (isNullOrUndefined(loginName)) {
           loginName = Vue.ls.get('LOGINNAME');
         }
@@ -102,11 +103,10 @@ const user = {
           name: loginName, // 昵称=IDcode
           welcome: welcome() // 欢迎语
         })
-        commit('SET_ITCODE', itCode)// IDcode
+        commit('SET_ITCODE', itcode)// IDcode
         resolve()
       })
     },
-    // 登出
     Logout({
       commit,
       state
@@ -115,6 +115,7 @@ const user = {
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
         Vue.ls.remove('Access-Token')
+        Vue.ls.remove(ACCESS_TOKEN)
         Vue.ls.remove('PRODUCTGROUP')
         Vue.ls.remove('LOGINNAME')
         Vue.ls.remove('USER_ITCODE')
@@ -122,11 +123,7 @@ const user = {
         localStorage.removeItem('flexibleReportId')
         window.location.reload()
         commit('Toggle_IsLogin', false)
-        logout(state.token).then(() => {
-          resolve()
-        }).catch(() => {
-          resolve()
-        })
+        resolve()
       })
     }
   }

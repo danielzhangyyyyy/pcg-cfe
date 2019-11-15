@@ -46,9 +46,8 @@
                 searchLoading: false,
                 tableList: [],
                 loading: false, // 页面是否加载中
-                queryParam: {
-                    noData: '1'
-                }, // 查询参数
+                queryParam: {}, // 查询参数
+                noData: '1',
                 optionAlertShow: true, // 是否显示选择框
                 selectedRowKeys: [], // 选中的行的keys数组
                 selectedRows: [], // 选中的行的全部数组
@@ -90,7 +89,7 @@
                 handler(route) {
                     console.log(route.path)
                     if (route.path === '/dailyStandardModel/dailyStandardModel_list') {
-                        this.queryParam.noData = '1'
+                        this.noData = '1'
                         this.handleOk()
                     }
                 },
@@ -106,7 +105,7 @@
                 }, 500);
             },
             searchOnClick() {
-                this.queryParam.noData = '2'
+                this.noData = '2'
                 this.form.validateFields((err, values) => {
                     if (!err) {
                         this.$refs.table.refresh(true);
@@ -123,7 +122,7 @@
             getListFun() {
                 const that = this
                 that.loadData = parameter => {
-                    if(this.queryParam.noData === '2'){
+                    if(this.noData === '2'){
                         that.searchLoading = true;
                         return list(Object.assign(parameter, that.queryParam)).then(res => {
                             that.searchLoading = false;
@@ -185,7 +184,7 @@
                             if (res.code == "0") {
                                 self.$notification.open({
                                     message: "Success",
-                                    description: res.msg,
+                                    description: self.$t("lang.messageDeleteSuccess"),
                                     duration: 6,
                                     style: { background: "#52C41A" }
                                 });

@@ -19,11 +19,13 @@ const getmenus = {
     },
 
     actions: {
-        // 保存nemu
-        SaveMenu({
-            commit
-        }, menu) {
-            commit('SAVE_MENU', menu)
+        SaveMenu({ commit }, menu) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    commit('SAVE_MENU', menu);
+                    resolve('success')
+                }, 500)
+            })
         },
     }
 }

@@ -11,14 +11,18 @@ import { ACCESS_TOKEN, USER_ITCODE } from '@/store/mutation-types'
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 // const whiteList = ['login', 'register', 'registerResult'] // no redirect whitelist
+
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   to.meta && (typeof to.meta.title !== 'undefined' && setDocumentTitle(`${to.meta.title} - ${domTitle}`))
   if (Vue.ls.get(ACCESS_TOKEN)) {
-    next()
-    if (Vue.ls.get(USER_ITCODE)) {
-      const itCode = Vue.ls.get(USER_ITCODE)
-      store.dispatch('GetUserInfo', { itCode })
+    if (!to.name) {
+      next('/404')
+      NProgress.done()
+    } else if (Vue.ls.get(USER_ITCODE)) {
+      next()
+      const itcode = Vue.ls.get(USER_ITCODE)
+      store.dispatch('GetUserInfo', { itcode })
     }
   } else {
     if (to.path === '/user/login') {
@@ -27,7 +31,57 @@ router.beforeEach((to, from, next) => {
     } else {
       next('/user/login')
     }
+    // notification.open({
+    //   message: 'Unauthorized',
+    //   description: 'Authorization verification failed',
+    //   duration: 6,
+    //   style: { 'background': '#F5222D' } //red
+    // })
   }
+
+  // if (Vue.ls.get(ACCESS_TOKEN)) {
+  //   /* has token */
+  //   if (to.path === '/user/login') {
+  //     next({ path: '/dashboard/workplace' })
+  //     NProgress.done()
+  //   } else {
+  //     if (store.getters.roles.length === 0) {
+  //       console.log(56565656);
+  //        store
+  //          .dispatch('GetInfo')
+  //          .then(res => {
+  //            const roles = res.result && res.result.role
+  //            store.dispatch('GenerateRoutes', { roles }).then(() => {
+  // 根据roles权限生成可访问的路由表
+  // 动态添加可访问路由表
+  //              router.addRoutes(store.getters.addRouters)
+  //              const redirect = decodeURIComponent(from.query.redirect || to.path)
+  //              if (to.path === redirect) {
+  // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
+  //                next({ ...to, replace: true })
+  //              } else {
+  // 跳转到目的路由
+  //                next({ path: redirect })
+  //              }
+  //            })
+  //          })
+  //          .catch(() => {
+  //            notification.error({
+  //              message: '错误',
+  //              description: '请求用户信息失败，请重试'
+  //            })
+  //            store.dispatch('Logout').then(() => {
+  //              next({ path: '/user/login', query: { redirect: to.fullPath } })
+  //            })
+  //          })
+  //     } else {
+  //       next()
+  //     }
+  //   }
+  // } else {//没有token
+  //   next({ path: '/user/login', query: { redirect: to.fullPath } })
+  //   NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
+  // }
 })
 
 router.afterEach(() => {

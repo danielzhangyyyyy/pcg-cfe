@@ -41,7 +41,7 @@ export default {
   data() {
     return {
       loading: false,
-      pagination: { showSizeChanger: true, hideOnSinglePage: true },
+      pagination: { showSizeChanger: true },
       queryParam: {}, // 查询参数
       columns: [],
       scrollSize: {},

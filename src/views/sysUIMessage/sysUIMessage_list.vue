@@ -56,11 +56,12 @@
       <template slot="operation" slot-scope="text, record">
         <span>
           <a-icon class="operationIcon" type="delete" @click="sureToDelete(record)" />
-          <span v-if="record.exportId!=''&&record.exportId">&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <span
+            :class="{visible: !(record.exportId!=''&&record.exportId)}"
+          >&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <a-icon
-            class="operationIcon"
+            :class="{operationIcon: true, visible: !(record.exportId!=''&&record.exportId)}"
             type="download"
-            v-if="record.exportId!=''&&record.exportId"
             @click="exportIdOnClick(record, record.exportId)"
           />
         </span>
@@ -93,12 +94,12 @@ export default {
     return {
       loading: false,
       currentPageManipulationAuth: [],
-      pagination: { showSizeChanger: true, hideOnSinglePage: true },
+      pagination: { showSizeChanger: true },
       queryParam: {}, // 查询参数
       columns: [],
       deleteLoading: false,
       changeAllLoading: false,
-      scrollSize: {},
+      scrollSize: {}
     };
   },
   computed: {
@@ -313,6 +314,9 @@ export default {
 .operationIcon:hover {
   transform: scale(1.4);
   cursor: pointer;
+}
+.visible {
+  visibility: hidden;
 }
 </style>
 

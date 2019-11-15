@@ -100,25 +100,20 @@
                 icon="search"
                 :loading="searchLoading"
                 @click="searchOnClick"
-              >{{ $t('lang.tabComSearchButtonName') }}</a-button>
+              >{{ $t('lang.tabComSearchButtonName') }}</a-button>&nbsp;&nbsp;
+              <a-button type="primary" icon="download" @click="exportExcelOnClick">Export Excel</a-button>
               <a-button
                 style="margin-left: 8px"
                 icon="undo"
-                @click="() => {form.resetFields()}"
+                @click="reset"
               >{{ $t('lang.tabComResetButtonName') }}</a-button>
-              <a @click="toggleAdvanced" style="margin-left: 8px">
-                {{ advanced ? $t('lang.tabComToggleCloseName') : $t('lang.tabComToggleShowName') }}
-                <a-icon :type="advanced ? 'up' : 'down'" />
-              </a>
             </span>
           </a-col>
         </a-row>
       </a-form>
     </div>
 
-    <div class="table-operator">
-      <a-button type="primary" icon="download" @click="exportExcelOnClick">Export Excel</a-button>
-    </div>
+    <div class="table-operator"></div>
 
     <a-alert style="margin-bottom: 16px">
       <template slot="message">
@@ -148,6 +143,7 @@
       :loading="loading"
       :showPagination="true"
     >
+      <span slot="convert" slot-scope="{text}">{{text|convert}}</span>
       <template slot="sbb" slot-scope="{text, record, index}">
         <a
           @click="sbbOnClick(record, text)"
@@ -156,27 +152,27 @@
       </template>
     </m-table>
     <!-- <a-table
-                ref="table"
-                size="small"
-                :scroll="scrollSize"
-                :columns="columns"
-                :dataSource="dataSource"
-                :pagination="false"
-                :loading="loading"
-                @change="handleTableChange"
-                :style="{'padding-top': '1px'}"
-        >
-          <span slot="sbb" slot-scope="text, record">
-            <a @click="sbbOnClick(record, text)" :class="{visitedPart: visitedKey.indexOf(text) != -1}">
-              {{ text }}
-            </a>
-          </span>
+                        ref="table"
+                        size="small"
+                        :scroll="scrollSize"
+                        :columns="columns"
+                        :dataSource="dataSource"
+                        :pagination="false"
+                        :loading="loading"
+                        @change="handleTableChange"
+                        :style="{'padding-top': '1px'}"
+                >
+                  <span slot="sbb" slot-scope="text, record">
+                    <a @click="sbbOnClick(record, text)" :class="{visitedPart: visitedKey.indexOf(text) != -1}">
+                      {{ text }}
+                    </a>
+                  </span>
     </a-table>-->
   </a-card>
 </template>
 <script>
 import Vue from "vue";
-import { STable, tableBtns } from "@/components";
+import { mTable, MyTable, STable, tableBtns } from "@/components";
 import {
   getBrand,
   getBrandByAssembly,
@@ -199,7 +195,9 @@ export default {
   name: "TableList",
   components: {
     STable,
-    tableBtns
+    tableBtns,
+    MyTable,
+    mTable
   },
   data() {
     return {
@@ -218,7 +216,7 @@ export default {
       advanced: true, // 高级搜索 展开/关闭
       queryParam: { cycle: "CURRENT" }, // 查询参数
       columns: [], // 表头
-      pagination: { showSizeChanger: true, hideOnSinglePage: true },
+      pagination: { showSizeChanger: true },
       productGroup: Vue.ls.get("PRODUCTGROUP"),
       infoTitle: {
         description: "",
@@ -241,6 +239,7 @@ export default {
   created() {
     this.visitedKey.length = 0;
     this.changeLanguage();
+    // this.setIpgColunm();
     this.scrollSize.x = getXScrollSize(this.columns, 0);
     this.getDropDown(
       { moduleName: "getCycleList" },
@@ -254,22 +253,6 @@ export default {
       getBrand
     );
     this.getMonths();
-    if (this.productGroup.toUpperCase() == "IPG") {
-      for (let element of this.columns) {
-        if (element.title !== "TPG_SBB") {
-          this.columns.splice(1, 0, {
-            title: "TPG_SBB",
-            dataIndex: "tpgSbb",
-            align: "left",
-            // sorter: true,
-            width: commonWidth.sbb
-          });
-          this.scrollSize.x += commonWidth.sbb;
-        } else {
-          return;
-        }
-      }
-    }
   },
   watch: {
     cycleDataList(val) {
@@ -328,6 +311,43 @@ export default {
     // }
   },
   methods: {
+    reset() {
+      this.form.resetFields();
+      this.cycleDataList.splice(0);
+      this.assemblyDataList.splice(0); // do not loaded in created
+      this.plantDataList.splice(0); // do not loaded in created
+      this.countryDataList.splice(0); // do not loaded in created
+      this.brandDataList.splice(0);
+      this.prdFamilyDataList.splice(0); // do not loaded in created
+      this.getDropDown(
+        { moduleName: "getCycleList" },
+        this.cycleDataList,
+        "CYCLE"
+      );
+      this.getDropDown(
+        { CYCLE: this.form.getFieldValue("cycle") },
+        this.brandDataList,
+        "brand",
+        getBrand
+      );
+    },
+    // setIpgColunm() {
+    //   if (this.productGroup.toUpperCase() == "IPG") {
+    //     for (let element of this.columns) {
+    //       if (element.title !== "TPG_SBB") {
+    //         this.columns.splice(1, 0, {
+    //           title: "TPG_SBB",
+    //           dataIndex: "tpgSbb",
+    //           align: "left",
+    //           fixed: "left",
+    //           width: commonWidth.sbb
+    //         });
+    //       } else {
+    //         return;
+    //       }
+    //     }
+    //   }
+    // },
     getMonths() {
       getDropDownList({
         moduleName: "getMonthListByCycle",
@@ -351,13 +371,27 @@ export default {
       });
     },
     exportExcelOnClick() {
-      delete this.queryParam.brand;
-      let params = { ...this.queryParam, requestId: this.requestId };
-      exportByURL(params, "ctoCostBom/exportExcel");
+      if (this.requestId) {
+        delete this.queryParam.brand;
+        let params = {
+          ...this.queryParam,
+          requestId: this.requestId,
+          eventName: "EXPORT_CTO_COST_BOM"
+        };
+        exportByURL(params, "ctoCostBom/exportExcel");
+      } else {
+        this.$notification.open({
+          message: "Warn:",
+          description: "Please search first before export！",
+          duration: 6,
+          style: { background: "#FAAD14" }
+        });
+      }
     },
     searchOnClick() {
       this.form.validateFields((err, values) => {
         if (!err) {
+          this.getShow(values.assembly);
           this.visitedKey = [];
           this.queryParam.uiName = "ctoCostBom";
           this.queryParam.uiAction = "getCtoCostBom";
@@ -371,10 +405,30 @@ export default {
             ? (this.queryParam.prodfamily = values.aspPrdFamily)
             : "";
           this.loadData({});
+          this.getMonths();
         } else {
           this.$notification.open({
             message: "Search condition error:",
             description: "please input search conditions.",
+            duration: 6,
+            style: { background: "#F5222D" }
+          });
+        }
+      });
+    },
+    getShow(value) {
+      for (let item in this.infoTitle) item = "";
+      getDescription({ item: value, itemType: "CTO" }).then(res => {
+        if (res.code == 0) {
+          this.infoTitle.description = res.result.itemDesc;
+          this.infoTitle.brand = res.result.brand;
+          this.infoTitle.family = res.result.aspPrdFamily;
+          this.infoTitle.mtm = res.result.item;
+          this.infoTitle.life = res.result.eolStatus;
+        } else {
+          this.$notification.open({
+            message: "Error:",
+            description: res.msg,
             duration: 6,
             style: { background: "#F5222D" }
           });
@@ -403,6 +457,7 @@ export default {
         this.timer = setTimeout(() => {
           this.form.resetFields(["plant"]);
           this.form.resetFields(["country"]);
+          this.plantDataList = [];
           this.countryDataList.splice(0);
           this.getDropDown(
             {
@@ -414,22 +469,6 @@ export default {
             "plant",
             getPlantListByAssembly
           );
-          getDescription({ item: value, itemType: "CTO" }).then(res => {
-            if (res.code == 0) {
-              this.infoTitle.description = res.result.itemDesc;
-              this.infoTitle.brand = res.result.brand;
-              this.infoTitle.family = res.result.aspPrdFamily;
-              this.infoTitle.mtm = res.result.item;
-              this.infoTitle.life = res.result.eolStatus;
-            } else {
-              this.$notification.open({
-                message: "Error:",
-                description: res.msg,
-                duration: 6,
-                style: { background: "#F5222D" }
-              });
-            }
-          });
           if (!this.assemblyDataList.includes(value)) {
             this.form.resetFields(["brand"]);
             this.form.resetFields(["aspPrdFamily"]);
@@ -466,6 +505,7 @@ export default {
           }
         }, 1500);
       } else if (decorator == "assembly" && (value == "" || !value)) {
+        if (this.timer != null) clearTimeout(this.timer);
         this.form.resetFields(["brand"]);
         this.form.resetFields(["aspPrdFamily"]);
         this.assemblyDataList = [];
@@ -498,6 +538,10 @@ export default {
         );
       } else if (decorator == "aspPrdFamily") {
         this.form.resetFields(["assembly"]);
+        this.form.resetFields(["plant"]);
+        this.form.resetFields(["country"]);
+        this.plantDataList.splice(0);
+        this.countryDataList.splice(0);
         this.getDropDown(
           {
             cycle: this.form.getFieldValue("cycle"),
@@ -538,7 +582,7 @@ export default {
             style: { background: "#F5222D" }
           });
           return;
-        } else {
+        } else if (res.msg != "NO_DATA_FOUND") {
           res.result.data.forEach((element, index) => {
             element.key = index;
           });
@@ -547,6 +591,9 @@ export default {
           self.dataSource.length > 10
             ? (self.scrollSize.y = 450)
             : (self.scrollSize.y = false);
+          self.loading = false;
+          self.searchLoading = false;
+        } else {
           self.loading = false;
           self.searchLoading = false;
         }
@@ -617,6 +664,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.table-page-search-wrapper {
+  height: 140px;
+}
 .myTable {
   min-width: 1000px;
   thead {
@@ -640,6 +690,7 @@ export default {
     }
   }
 }
+
 .ant-table-content
   .ant-table-body
   .ant-table-tbody

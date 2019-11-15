@@ -6,7 +6,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store/'
 import './core/lazy_use' // 按需加载
-import { VueAxios } from './utils/request' // 按需加载
+import {VueAxios} from './utils/request' // 按需加载
 // mock
 // import './mock'
 import bootstrap from './core/bootstrap'
@@ -15,16 +15,15 @@ import './permission' // permission control
 import './utils/filter' // global filter
 import VueI18n from 'vue-i18n'
 import './commoncss/fontStyle.less'
-import { mTable } from "mz-series"
+import './core/echartsUse'
 
-import { DEFAULT_LANGUAGE } from '@/store/mutation-types'
+import {DEFAULT_LANGUAGE} from '@/store/mutation-types'
 
 Vue.config.productionTip = false
 
 // mount axios Vue.$http and this.$http
 Vue.use(VueAxios)
 Vue.use(VueI18n)
-Vue.use(mTable)
 
 const langs = Vue.ls.get(DEFAULT_LANGUAGE)
 const i18n = new VueI18n({
@@ -39,7 +38,7 @@ new Vue({
   router,
   store,
   i18n,
-  created() {
+  created () {
     bootstrap()
   },
   render: h => h(App)

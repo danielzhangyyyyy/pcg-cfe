@@ -19,6 +19,34 @@ const tableTitle_langEn = [
         fixed: 'left',
     },
     {
+        title: 'Product Family',
+        dataIndex: 'family',
+        align: 'right',
+        width: commonWidth.prodFamily,
+        sorter: true
+    },
+    {
+        title: 'Subgeo',
+        dataIndex: 'subgeo',
+        align: 'right',
+        width: commonWidth.subgeo,
+        sorter: true
+    },
+    {
+        title: 'Country/Region',
+        dataIndex: 'country',
+        align: 'right',
+        width: commonWidth.country,
+        sorter: true
+    },
+    {
+        title: 'TBA Type',
+        dataIndex: 'tbaType',
+        align: 'right',
+        width: commonWidth.tbatype,
+        sorter: true
+    },
+    {
         title: 'm1',
         dataIndex: 'm1',
         align: 'right',
@@ -152,6 +180,54 @@ const editAndDetail_langEn = [
         text: '',
         dropDownList: [],
         message: 'Please input plant'
+    },
+    {
+        label: 'Product Family',
+        decorator: 'family',
+        required: false,
+        allowClear: true,
+        editDisabled: false,
+        message: 'Please select',
+        placeHolder: 'Please select',
+        inputType: 'dropDown',
+        text: '',
+        dropDownList: []
+    },
+    {
+        label: 'Subgeo',
+        decorator: 'subgeo',
+        required: false,
+        allowClear: true,
+        editDisabled: false,
+        message: 'Please select',
+        placeHolder: 'Please select',
+        inputType: 'dropDown',
+        text: '',
+        dropDownList: []
+    },
+    {
+        label: 'Country/Region',
+        decorator: 'country',
+        required: false,
+        allowClear: true,
+        editDisabled: false,
+        message: 'Please select',
+        placeHolder: 'Please select',
+        inputType: 'dropDown',
+        text: '',
+        dropDownList: []
+    },
+    {
+        label: 'TBA Type',
+        decorator: 'tbaType',
+        required: false,
+        allowClear: true,
+        editDisabled: false,
+        message: 'Please select',
+        placeHolder: 'Please select',
+        inputType: 'dropDown',
+        text: '',
+        dropDownList: []
     },
     {
         label: 'm1',
@@ -306,6 +382,58 @@ let filter_langEn = [
         index: 3,
         label: 'Plant',
         decorator: 'plant',
+        required: false,
+        allowClear: true,
+        editDisabled: false,
+        message: 'Please select',
+        placeHolder: 'Please select',
+        inputType: 'dropDown',
+        text: '',
+        dropDownList: []
+    },
+    {
+        index: 4,
+        label: 'Product Family',
+        decorator: 'family',
+        required: false,
+        allowClear: true,
+        editDisabled: false,
+        message: 'Please select',
+        placeHolder: 'Please select',
+        inputType: 'dropDown',
+        text: '',
+        dropDownList: []
+    },
+    {
+        index: 5,
+        label: 'Subgeo',
+        decorator: 'subgeo',
+        required: false,
+        allowClear: true,
+        editDisabled: false,
+        message: 'Please select',
+        placeHolder: 'Please select',
+        inputType: 'dropDown',
+        text: '',
+        dropDownList: []
+    },
+    {
+        index: 6,
+        label: 'Country/Region',
+        decorator: 'country',
+        required: false,
+        allowClear: true,
+        editDisabled: false,
+        message: 'Please select',
+        placeHolder: 'Please select',
+        inputType: 'dropDown',
+        text: '',
+        dropDownList: []
+    },
+    {
+        index: 7,
+        label: 'TBA Type',
+        decorator: 'tbaType',
         required: false,
         allowClear: true,
         editDisabled: false,

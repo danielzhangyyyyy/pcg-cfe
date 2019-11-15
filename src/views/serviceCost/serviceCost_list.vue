@@ -103,13 +103,6 @@
                 :rowKey="(record) => record.rid"
                 :data="loadData"
                 :alert="options.alert"
-                :customRow="(record) => { return {
-                    on:{
-                      dblclick:(record)=>{
-                        // this.doubleClickOnRow(record,true)
-                      }
-                    }
-                  }}"
                 :rowSelection="options.rowSelection">
         </s-table>
     </a-card>
@@ -119,7 +112,7 @@
     import moment from 'moment'
     import {STable, tableBtns} from '@/components'
     import {del, getDropDownList, list} from '@api/serviceCost_api'
-    import { getXScrollSize } from "@api/publicFunc_api";
+    import {getXScrollSize} from "@api/publicFunc_api";
     import langZh from '../../locales/zh-CN/serviceCost_lang.js'
     import langEn from '../../locales/en-US/serviceCost_lang.js'
 
@@ -151,16 +144,6 @@
                 columns: [],
                 loadData: '',
                 scrollSize: {},
-                // 加载数据方法 必须为 Promise 对象
-                // loadData: parameter => {
-                //   console.log('loadData.parameter', parameter)
-                //   return list(Object.assign(parameter, this.queryParam))
-                //     .then(res => {
-                //       console.log(res.result)
-                //       return res.result
-                //     })
-                // },
-                // custom table alert & rowSelection
                 options: {
                     alert: {
                         show: true, clear: () => {
@@ -230,9 +213,8 @@
             language(val) {
                 this.changeLanguage()
             },
-            '$route': {
+            $route: {
                 handler(route) {
-                    console.log(route.path)
                     if (route.path === '/serviceCost/serviceCost_list') {
                         this.handleOk()
                     }
@@ -245,23 +227,20 @@
                 return trigger.parentElement;
             },
             searchOnClick() {
-                // this.$refs.table.refresh(true);
                 this.form.validateFields((err, values) => {
-                    console.log("err", err);
                     console.log("values", values);
-
                     if (!err) {
                         for (let key in values) {
                             this.queryParam[key] = values[key]
                         }
                         this.$refs.table.refresh(true);
+                        this.getMonths();
                     } else {
-                        this.$notification.config({
-                            duration: 5
-                        });
-                        this.$notification["error"]({
+                        this.$notification.open({
                             message: "Search condition error:",
-                            description: "please input search conditions."
+                            description: "please input search conditions.",
+                            duration: 6,
+                            style: {background: "#F5222D"}
                         });
                     }
                 });
@@ -289,7 +268,7 @@
                 });
             },
             getMonths() {
-                getDropDownList({moduleName: 'getMonthListByCycle', cycle: 'CURRENT'}).then(res => {
+                getDropDownList({moduleName: 'getMonthListByCycle', cycle: this.queryParam.cycle}).then(res => {
                     for (let key in res.result[0]) {
                         for (let item of this.columns) {
                             if (item.dataIndex && item.dataIndex.toUpperCase() === key.toUpperCase()) {
@@ -303,39 +282,19 @@
             },
             getListFun() {
                 const that = this
-                // const value = this.queryParam
                 that.loadData = parameter => {
                     that.searchLoading = true;
-                    console.log('loadData.parameter', parameter)
-                    return list(Object.assign(parameter, that.queryParam))
-                        .then(res => {
-                            console.log(res.result)
-                            that.searchLoading = false;
-                            that.$refs.table.clearSelected();
-                            return res.result
-                        })
+                    return list(Object.assign(parameter, that.queryParam)).then(res => {
+                        that.searchLoading = false;
+                        that.$refs.table.clearSelected();
+                        return res.result
+                    })
                 }
             },
-            // doubleClickOnRow (record) { // 双击行查看详情
-            //     const rowKey = record.target.parentNode.dataset.rowKey
-            //     console.log(rowKey)
-            //     Vue.ls.set('serviceCost_dblclickRowKey', rowKey)
-            //     this.$router.replace('/serviceCost/serviceCost_detail')
-            //     // this.editListFun(rowKey, true)
-            // },
-
             // 选择列表
             onSelectChange(selectedRowKeys, selectedRows) {
-                console.log('selectedRowKeys changed: ', selectedRowKeys)
-                console.log('selectedRows changed: ', selectedRows)
                 this.selectedRowKeys = selectedRowKeys
                 this.selectedRows = selectedRows
-            },
-            // 修改用户
-            editListFun(rowKey, disab) {
-                console.log(rowKey)
-                console.log(disab)
-                this.$refs.editForm.edit(rowKey, disab)
             },
             // 删除单个列表
             deleteListFun(id) {
@@ -348,7 +307,7 @@
             // 删除选中列表
             deleteSeclectAll() {
                 if (this.selectedRowKeys.length == 0) {
-                       this.$notification.open({
+                    this.$notification.open({
                         message: "Warn",
                         description: this.$t("lang.messagePleaseSelectDeleteRow"),
                         duration: 6,
@@ -357,7 +316,12 @@
                     return;
                 }
                 if (this.selectedRows[0].cycle != "CURRENT") {
-                    this.$message.error("Only the data of CURRENT cycle can be delete");
+                    this.$notification.open({
+                        message: "Warn:",
+                        description: "Only the data of CURRENT cycle can be Delete",
+                        duration: 6,
+                        style: {'background': '#FAAD14'}
+                    });
                     return;
                 }
                 const rowKeys = [];
@@ -400,7 +364,8 @@
                             // this.requestFailed(err)
                         });
                     },
-                    onCancel() {}
+                    onCancel() {
+                    }
                 });
             },
             // 更改列表数组
@@ -426,26 +391,6 @@
                     date: moment(new Date())
                 }
             }
-            // 开启、关闭选择框
-            // tableOption () {
-            //   if (!this.optionAlertShow) {
-            //     this.options = {
-            //       alert: { show: true, clear: () => { this.selectedRowKeys = [] } },
-            //       rowSelection: {
-            //         selectedRowKeys: this.selectedRowKeys,
-            //         onChange: this.onSelectChange
-            //       }
-            //     }
-            //     this.optionAlertShow = true
-            //   } else {
-            //     this.options = {
-            //       alert: false,
-            //       rowSelection: null
-            //     }
-            //     this.optionAlertShow = false
-            //   }
-            // }
-
         }
 
     }

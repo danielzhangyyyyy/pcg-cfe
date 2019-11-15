@@ -243,9 +243,9 @@
     searchOnClick() {
       this.form.validateFields((err, values) => {
         if (!err) {
-            let val = values.basicName.trim();
-            val!==''&&val!==undefined ? this.queryParam.basicName = `%${val}%` : this.queryParam.basicName = values.basicName
-          // values.basicName !== undefined?this.queryParam.basicName = values.basicName.trim(): this.queryParam.basicName = values.basicName
+            let val = ''
+            values.basicName?val = values.basicName.trim(): ''
+            val!==undefined ? this.queryParam.basicName = `%${val}%` : this.queryParam.basicName = values.basicName
           this.$refs.table.refresh(true);
         } else {
           this.$notification.open({

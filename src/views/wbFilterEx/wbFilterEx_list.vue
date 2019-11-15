@@ -132,7 +132,7 @@
       this.exportLoading = false;
     },
     uploadOnClick() {
-      this.$router.push(`/upload/upload_list/${this.uploadId}/origin/${this.$route.name}`);
+      this.$router.push(`/upload/upload_list/${this.uploadId}/origin/${this.$route.name}/eventName/rptId`);
     },
     returnBtnOnClick() {
       this.$store.dispatch('ToggleCloseTab', '');

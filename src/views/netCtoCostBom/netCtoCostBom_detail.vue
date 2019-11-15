@@ -44,6 +44,7 @@
                 :style="{'padding-top': '40px'}"
                 :rowClassName="rowClassName"
         >
+            <span slot="convert" slot-scope="text">{{text|convert}}</span>
         </a-table>
 
     </a-card>
@@ -67,7 +68,7 @@
                 columns: [], // 表头
                 columns1: [],
                 visitedKey: [],
-                pagination: {showSizeChanger: true, hideOnSinglePage: true},
+                pagination: {showSizeChanger: true},
                 title: {
                     sbb: '',
                     plant: '',

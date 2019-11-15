@@ -32,7 +32,7 @@ export default function Initializer () {
   store.commit('TOGGLE_COLOR', Vue.ls.get(DEFAULT_COLOR, config.primaryColor))
 
   store.commit('TOGGLE_Language', Vue.ls.get(DEFAULT_LANGUAGE, config.languages))
-  // store.commit('USER_ITCODE', Vue.ls.get(USER_ITCODE, config.itCode))
+  // store.commit('USER_ITCODE', Vue.ls.get(USER_ITCODE, config.itcode))
   store.commit('TOGGLE_MULTI_TAB', Vue.ls.get(DEFAULT_MULTI_TAB, config.multiTab))
   store.commit('SET_TOKEN', Vue.ls.get(ACCESS_TOKEN))
 

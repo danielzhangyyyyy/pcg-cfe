@@ -51,6 +51,10 @@
             return {
                 brandDataList: [],
                 plantDataList: [],
+                familyDataList: [],
+                subgeoDataList: [],
+                countryDataList: [],
+                tabTypeDataList: ['PERCENTAGE','US_DOLLAR'],
                 babelList: [], // 从lang包获取的要展示的字段
                 form: this.$form.createForm(this),
                 productGroup: Vue.ls.get("PRODUCTGROUP")
@@ -62,6 +66,27 @@
             }
         },
         watch: {
+            countryDataList(){
+                this.babelList.forEach(element => {
+                    if (element["decorator"] == "country") {
+                        element["dropDownList"] = [].concat(this.countryDataList);
+                    }
+                });
+            },
+            subgeoDataList(){
+                this.babelList.forEach(element => {
+                    if (element["decorator"] == "subgeo") {
+                        element["dropDownList"] = [].concat(this.subgeoDataList);
+                    }
+                });
+            },
+            familyDataList(){
+                this.babelList.forEach(element => {
+                    if (element["decorator"] == "family") {
+                        element["dropDownList"] = [].concat(this.familyDataList);
+                    }
+                });
+            },
             brandDataList() {
                 this.babelList.forEach(element => {
                     if (element["decorator"] == "brand") {
@@ -87,7 +112,13 @@
                 this.brandDataList,
                 "BRAND"
             );
+            this.getDropDown(
+                {moduleName: "getSubgeoList"},
+                this.subgeoDataList,
+                "SUBGEO"
+            );
             this.getMonths();
+            this.setDropDownLists();
         },
         activated() {
             this.form.resetFields();
@@ -122,6 +153,13 @@
                     });
                 });
             },
+            setDropDownLists() {
+                this.babelList.forEach(element => {
+                    if (element["decorator"] == "tbaType") {
+                        element["dropDownList"] = [].concat(this.tabTypeDataList);
+                    }
+                });
+            },
             handleDropDownChange(value, decorator) {
                 if(decorator === 'brand'){
                     this.form.resetFields('plant')
@@ -130,6 +168,21 @@
                         {moduleName: "getPlantByBrand",brand: value},
                         this.plantDataList,
                         "PLANT"
+                    );
+                    this.form.resetFields('family')
+                    this.familyDataList = []
+                    this.getDropDown(
+                        {moduleName: "getBizProdFByBrand",brand: value},
+                        this.familyDataList,
+                        "PROD_FAMILY"
+                    );
+                } else if(decorator === 'subgeo'){
+                    this.form.resetFields('country');
+                    this.countryDataList = [];
+                    this.getDropDown(
+                        {moduleName: "getCountryBySubgeo",subgeo: value},
+                        this.countryDataList,
+                        "COUNTRY"
                     );
                 }
             },

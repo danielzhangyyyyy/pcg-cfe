@@ -133,6 +133,13 @@ const tableTitle_langEn = [
         sorter: true
     },
     {
+        title: 'Owner',
+        dataIndex: 'owner',
+        align: 'right',
+        width: commonWidth.owner,
+        sorter: true
+    },
+    {
         title: 'Last Modified By',
         dataIndex: 'sysLastModifiedBy',
         align: 'left',

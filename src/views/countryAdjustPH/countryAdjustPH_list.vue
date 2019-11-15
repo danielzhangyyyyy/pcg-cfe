@@ -238,6 +238,7 @@
                             values[key]!== undefined && key === 'phCode' ? val = values[key].trim(): ''
                             key === 'phCode' && val !== ''? this.queryParam[key] = `%${val}%` : this.queryParam[key] = values[key]
                         }
+                        this.getMonths();
                         this.$refs.table.refresh(true);
                     } else {
                         this.$notification.open({
@@ -273,7 +274,7 @@
             },
             handleDropDownChange(value, decorator) {},
             getMonths() {
-                getDropDownList({moduleName: 'getMonthListByCycle', cycle: 'CURRENT'}).then(res => {
+                getDropDownList({moduleName: 'getMonthListByCycle', cycle: this.queryParam.cycle}).then(res => {
                     for (let key in res.result[0]) {
                         for (let item of this.columns) {
                             if (item.dataIndex && item.dataIndex.toUpperCase() === key.toUpperCase()) {

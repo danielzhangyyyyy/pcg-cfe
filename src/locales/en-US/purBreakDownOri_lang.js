@@ -18,6 +18,7 @@ const tableTitle_langEn = [
         title: "Part Number",
         key: "partNumber",
         dataIndex: "partNumber",
+        fixed: "left",
         align: "left",
         width: commonWidth.part,
         sorter: true

@@ -1,6 +1,6 @@
 <template>
     <a-card :bordered="false" class="content">
-        <div class="table-page-search-wrapper">
+        <div class="table-page-search-wrapper table-page-search-wrapper-scoped">
             <a-form layout="inline" @submit="handleSubmit" :form="form">
                 <a-row :gutter="48">
                     <a-col :md="8" :sm="24" v-for="item in filterList.slice(0,2)" :key="item.index">
@@ -93,36 +93,26 @@
                         </a-col>
                     </template>
                     <a-col :md="!advanced && 8 || 24" :sm="24">
-            <span
-                    class="table-page-search-submitButtons"
-                    :style="advanced && { float: 'right', overflow: 'hidden' } || {} "
-            >
-              <a-checkbox @change="expandAllOnChange">Expand All</a-checkbox>
-              <a-button
-                      type="primary"
-                      icon="search"
-                      :loading="searchLoading"
-                      @click="searchOnClick"
-              >{{ $t('lang.tabComSearchButtonName') }}</a-button>
-              <a-button
-                      style="margin-left: 8px"
-                      icon="undo"
-                      @click="() => {form.resetFields()}"
-              >{{ $t('lang.tabComResetButtonName') }}</a-button>
-              <a @click="toggleAdvanced" style="margin-left: 8px">
-                {{ advanced ? $t('lang.tabComToggleCloseName') : $t('lang.tabComToggleShowName') }}
-                <a-icon :type="advanced ? 'up' : 'down'"/>
-              </a>
-            </span>
+                        <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
+                          <a-checkbox @change="expandAllOnChange">Expand All</a-checkbox>
+                          <a-button
+                                  type="primary"
+                                  icon="search"
+                                  :loading="searchLoading"
+                                  @click="searchOnClick"
+                          >{{ $t('lang.tabComSearchButtonName') }}</a-button>&nbsp;&nbsp;
+                            <a-button type="primary" icon="download" @click="exportExcelOnClick">Export Excel</a-button>&nbsp;&nbsp;
+                            <a-button type="primary" icon="plus-circle" @click="modelListOnClick">Model List</a-button>&nbsp;&nbsp;
+                            <a-button type="primary" icon="form" @click="executeModelListOnClick">Execute Model List</a-button>
+                          <a-button
+                                  style="margin-left: 8px"
+                                  icon="undo"
+                                  @click="reset"
+                          >{{ $t('lang.tabComResetButtonName') }}</a-button>
+                        </span>
                     </a-col>
                 </a-row>
             </a-form>
-        </div>
-
-        <div class="table-operator">
-            <a-button type="primary" icon="download" @click="exportExcelOnClick">Export Excel</a-button>
-            <a-button type="primary" icon="plus-circle" @click="modelListOnClick">Model List</a-button>
-            <a-button type="primary" icon="form" @click="executeModelListOnClick">Execute Model List</a-button>
         </div>
 
         <a-alert style="margin-bottom: 16px">
@@ -130,11 +120,18 @@
                 <div style="margin-right: 12px">
                     <span v-if="!infoTitle.description" :style="{'font-weight': 'bold'}">NET Cost BOM</span>
                     <div v-else style="line-height: 25px;">
-                        <span style="font-weight: bold">Product Description: &nbsp;</span>{{infoTitle.description}}&nbsp;&nbsp;
-                        <span style="font-weight: bold">Brand: </span>{{infoTitle.brand}}&nbsp;&nbsp;
-                        <span style="font-weight: bold">Product Family:</span>{{infoTitle.family}}&nbsp;&nbsp;
-                        <span style="font-weight: bold">MTM: </span>{{infoTitle.mtm}}&nbsp;&nbsp;
-                        <span style="font-weight: bold">Cost Life: </span>{{infoTitle.life}}&nbsp;&nbsp;
+                        <span style="font-weight: bold">Product Description: &nbsp;</span>
+                        {{infoTitle.description}}&nbsp;&nbsp;
+                        <span style="font-weight: bold">Brand:</span>
+                        {{infoTitle.brand}}&nbsp;&nbsp;
+                        <span
+                                style="font-weight: bold"
+                        >Product Family:</span>
+                        {{infoTitle.family}}&nbsp;&nbsp;
+                        <span style="font-weight: bold">MTM:</span>
+                        {{infoTitle.mtm}}&nbsp;&nbsp;
+                        <span style="font-weight: bold">Cost Life:</span>
+                        {{infoTitle.life}}&nbsp;&nbsp;
                     </div>
                 </div>
             </template>
@@ -146,7 +143,7 @@
                 :scroll="scrollSize1"
                 :columns="columns1"
                 :dataSource="dataSource"
-                :pagination="pagination"
+                :pagination="false"
                 :loading="loading"
                 :expandedRowKeys="expandedRowKeys"
                 @change="handleTableChange"
@@ -154,25 +151,26 @@
                 :rowClassName="rowClassNameFirstTable"
                 :style="{'padding-top': '1px'}"
         >
-          <span slot="part" slot-scope="text, record">
-            <a
-                    v-if="record.isCosttape=='Y'&&record.isChild&&(record.costType == 'OPTION'||record.costType == 'DUMMY'||record.costType == 'COMP-COST'||record.costType == 'VISUAL')"
-                    @click="subPartOnClick(record)"
-                    :style="{'font-weight': 'bold'}"
-                    :class="{visitedPart: visitedKey.indexOf(record.part) != -1}"
-            >{{ text }}</a>
-            <a
-                    v-else-if="(record.costType == 'OPTION'||record.costType == 'DUMMY'||record.costType == 'COMP-COST'||record.costType == 'VISUAL')&&record.isChild"
-                    @click="subPartOnClick(record)"
-                    :class="{visitedPart: visitedKey.indexOf(record.part) != -1}"
-            >{{ text }}</a>
-            <a
-                    v-else-if="(record.costType == 'OPTION'||record.costType == 'DUMMY'||record.costType == 'COMP-COST'||record.costType == 'VISUAL')&&record.lvl==1&&record.connectByIsLeaf==1"
-                    @click="subPartOnClick(record)"
-                    :class="{visitedPart: visitedKey.indexOf(record.part) != -1}"
-            >{{text}}</a>
-            <span v-else>{{ text }}</span>
-          </span>
+            <span slot="convert" slot-scope="text">{{text|convert}}</span>
+            <span slot="part" slot-scope="text, record">
+                <a
+                        v-if="record.isCosttape=='Y'&&record.isChild&&(record.costType == 'OPTION'||record.costType == 'DUMMY'||record.costType == 'COMP-COST'||record.costType == 'VISUAL')"
+                        @click="subPartOnClick(record)"
+                        :style="{'font-weight': 'bold'}"
+                        :class="{visitedPart: visitedKey.indexOf(record.part) != -1}"
+                >{{ text }}</a>
+                <a
+                        v-else-if="(record.costType == 'OPTION'||record.costType == 'DUMMY'||record.costType == 'COMP-COST'||record.costType == 'VISUAL')&&record.isChild"
+                        @click="subPartOnClick(record)"
+                        :class="{visitedPart: visitedKey.indexOf(record.part) != -1}"
+                >{{ text }}</a>
+                <a
+                        v-else-if="(record.costType == 'OPTION'||record.costType == 'DUMMY'||record.costType == 'COMP-COST'||record.costType == 'VISUAL')&&record.lvl==1&&record.connectByIsLeaf==1"
+                        @click="subPartOnClick(record)"
+                        :class="{visitedPart: visitedKey.indexOf(record.part) != -1}"
+                >{{text}}</a>
+                <span v-else>{{ text }}</span>
+              </span>
         </a-table>
 
         <a-table
@@ -181,12 +179,13 @@
                 :scroll="scrollSize2"
                 :columns="columns2"
                 :dataSource="dataSource2"
-                :pagination="pagination2"
+                :pagination="false"
                 :loading="loading"
                 :style="{'padding-top': '10px'}"
                 :rowClassName="rowClassName"
-        ></a-table>
-
+        >
+            <span slot="convert" slot-scope="text">{{text|convert}}</span>
+        </a-table>
     </a-card>
 </template>
 
@@ -240,18 +239,18 @@
                 selectedRowKeys: [], // 选中的行的keys数组
                 selectedRows: [], // 选中的行的全部数组
                 columns1: [], // 表头
-                pagination: {showSizeChanger: true, hideOnSinglePage: true},
+                pagination: {showSizeChanger: true},
                 dataSource2: [],
                 columns2: [],
-                pagination2: {showSizeChanger: true, hideOnSinglePage: true},
+                pagination2: {showSizeChanger: true},
                 loading2: false,
                 description: "",
                 infoTitle: {
                     description: "",
-                    brand: '',
-                    family: '',
-                    mtm: '',
-                    life: ''
+                    brand: "",
+                    family: "",
+                    mtm: "",
+                    life: ""
                 },
                 scrollSize1: {y: 350},
                 scrollSize2: {y: 350},
@@ -267,8 +266,8 @@
         created() {
             this.visitedKey.length = 0;
             this.changeLanguage();
-            this.scrollSize1.x = getXScrollSize(this.columns1,0);
-            this.scrollSize2.x = getXScrollSize(this.columns2,0);
+            this.scrollSize1.x = getXScrollSize(this.columns1, 0);
+            this.scrollSize2.x = getXScrollSize(this.columns2, 0);
             this.getDropDown(
                 {moduleName: "getCycleList"},
                 this.cycleDataList,
@@ -327,7 +326,7 @@
             },
             language(val) {
                 this.changeLanguage();
-            },
+            }
             // $route: {
             //   handler(route) {
             //     console.log(route.path);
@@ -339,6 +338,26 @@
             // }
         },
         methods: {
+            reset() {
+                this.form.resetFields();
+                this.cycleDataList.splice(0);
+                this.assemblyDataList.splice(0); // do not loaded in created
+                this.plantDataList.splice(0); // do not loaded in created
+                this.countryDataList.splice(0); // do not loaded in created
+                this.brandDataList.splice(0);
+                this.prdFamilyDataList.splice(0); // do not loaded in created
+                this.getDropDown(
+                    {moduleName: "getCycleList"},
+                    this.cycleDataList,
+                    "CYCLE"
+                );
+                this.getDropDown(
+                    {CYCLE: this.form.getFieldValue("cycle")},
+                    this.brandDataList,
+                    "brand",
+                    getBrand
+                );
+            },
             getMonths() {
                 getDropDownList({
                     moduleName: "getMonthListByCycle",
@@ -430,20 +449,28 @@
                 });
             },
             exportExcelOnClick() {
-                exportByURL(
-                    {...this.queryParam, eventName: "UPLOAD_UI_COST_BOM_NET"},
-                    "netCostBom/exportExcel"
-                );
+                if (this.queryParam.requestId) {
+                    exportByURL(
+                        {...this.queryParam, eventName: "EXPORT_UI_COSTBOM_NET"},
+                        "costBom/exportExcel"
+                    );
+                } else {
+                    this.$notification.open({
+                        message: "Warn:",
+                        description: "Please search first before export！",
+                        duration: 6,
+                        style: {background: "#FAAD14"}
+                    });
+                }
             },
             searchOnClick() {
                 this.queryParam.requestId = new moment().format(
                     "YYYY-MM-DD HH:mm:ss.SSS"
                 );
-                // this.$refs.table.refresh(true);
                 this.form.validateFields((err, values) => {
-                    console.log("err", err);
                     console.log("values", values);
                     if (!err) {
+                        this.getShow(values.assembly);
                         this.queryParam.uiName = "netCostBom";
                         //this.queryParam.uiAction = "invokeCostBomNet";
                         this.queryParam.cycle = values.cycle;
@@ -456,10 +483,30 @@
                             ? (this.queryParam.prodfamily = values.aspPrdFamily)
                             : "";
                         this.loadData({});
+                        this.getMonths();
                     } else {
                         this.$notification.open({
                             message: "Search condition error:",
                             description: "please input search conditions.",
+                            duration: 6,
+                            style: {background: "#F5222D"}
+                        });
+                    }
+                });
+            },
+            getShow(value) {
+                for (let item in this.infoTitle) item = "";
+                getDescription({item: value}).then(res => {
+                    if (res.code == 0) {
+                        this.infoTitle.description = res.result.itemDesc;
+                        this.infoTitle.brand = res.result.brand;
+                        this.infoTitle.family = res.result.aspPrdFamily;
+                        this.infoTitle.mtm = res.result.item;
+                        this.infoTitle.life = res.result.eolStatus;
+                    } else {
+                        this.$notification.open({
+                            message: "Error:",
+                            description: res.msg,
                             duration: 6,
                             style: {background: "#F5222D"}
                         });
@@ -477,12 +524,12 @@
             },
             getDropDown(param, dropdownList, key, api = getDropDownList) {
                 /*  api(Object.assign({}, param)).then(res => {
-                            dropdownList.splice(0);
-                            if (res.result.lenth != 0) {
-                              res.result.forEach(el => {
-                                dropdownList.push(el[key]);
-                              });
-                            } */
+                                                dropdownList.splice(0);
+                                                if (res.result.lenth != 0) {
+                                                  res.result.forEach(el => {
+                                                    dropdownList.push(el[key]);
+                                                  });
+                                                } */
                 return new Promise((resolve, reject) => {
                     api(Object.assign({}, param)).then(res => {
                         dropdownList.splice(0);
@@ -507,6 +554,7 @@
                     this.timer = setTimeout(() => {
                         this.form.resetFields(["plant"]);
                         this.form.resetFields(["country"]);
+                        this.plantDataList = [];
                         this.countryDataList.splice(0);
                         this.getDropDown(
                             {cycle: this.form.getFieldValue("cycle"), item: value},
@@ -514,23 +562,6 @@
                             "plant",
                             getPlantListByAssembly
                         );
-                        // this.description = "";
-                        getDescription({item: value}).then(res => {
-                            if(res.code == 0){
-                                this.infoTitle.description = res.result.itemDesc
-                                this.infoTitle.brand = res.result.brand
-                                this.infoTitle.family = res.result.aspPrdFamily
-                                this.infoTitle.mtm = res.result.item
-                                this.infoTitle.life = res.result.eolStatus
-                            } else {
-                                this.$notification.open({
-                                    message: 'Error:',
-                                    description: res.msg,
-                                    duration: 6,
-                                    style: { background: "#F5222D" }
-                                });
-                            }
-                        });
                         if (!this.assemblyDataList.includes(value)) {
                             this.form.resetFields(["brand"]);
                             this.form.resetFields(["aspPrdFamily"]);
@@ -562,9 +593,12 @@
                         }
                     }, 1500);
                 } else if (decorator == "assembly" && (value == "" || !value)) {
+                    if (this.timer != null) {
+                        clearTimeout(this.timer);
+                    }
                     this.form.resetFields(["brand"]);
                     this.form.resetFields(["aspPrdFamily"]);
-                    this.assemblyDataList = []
+                    this.assemblyDataList = [];
                     this.getDropDown(
                         {CYCLE: this.form.getFieldValue("cycle")},
                         this.brandDataList,
@@ -593,6 +627,10 @@
                     );
                 } else if (decorator == "aspPrdFamily") {
                     this.form.resetFields(["assembly"]);
+                    this.form.resetFields(["plant"]);
+                    this.form.resetFields(["country"]);
+                    this.plantDataList.splice(0);
+                    this.countryDataList.splice(0);
                     this.getDropDown(
                         {
                             cycle: this.form.getFieldValue("cycle"),
@@ -645,14 +683,14 @@
                             message: "Error",
                             description: res.msg,
                             duration: 6,
-                            style: {'background': '#F5222D'}
+                            style: {background: "#F5222D"}
                         });
                         return;
-                    } else {
+                    } else if (res.msg != "NO_DATA_FOUND") {
                         self.expandedRowKeys = [];
                         const pagination = {...self.pagination};
                         /*   pagination.total = res.result.bom.length;
-                                    pagination.pageSize = res.result.bom.length; */
+                                                                pagination.pageSize = res.result.bom.length; */
                         pagination.total = 300;
                         pagination.pageSize = 300;
                         pagination.current = 1;
@@ -665,7 +703,9 @@
                                 for (let j = 0; j < res.result.bom[i]["subItems"].length; j++) {
                                     res.result.bom[i]["subItems"][j].isChild = true;
                                     res.result.bom[i]["subItems"][j].key =
-                                        res.result.bom[i]["entityDto"].key + "00" + (j + 1).toString();
+                                        res.result.bom[i]["entityDto"].key +
+                                        "00" +
+                                        (j + 1).toString();
                                 }
                                 res.result.bom[i]["entityDto"].children =
                                     res.result.bom[i]["subItems"];
@@ -683,6 +723,9 @@
                             res.result.adder[i].key = i + 1;
                         }
                         self.dataSource2 = res.result.adder;
+                    } else {
+                        self.loading = false;
+                        self.searchLoading = false;
                     }
                 });
             },
@@ -813,6 +856,10 @@
     };
 </script>
 <style>
+    .table-page-search-wrapper-scoped {
+        height: 140px;
+    }
+
     .darkRows {
         background-color: #dee5ec !important;
     }

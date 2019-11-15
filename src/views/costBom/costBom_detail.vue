@@ -47,7 +47,7 @@
                 loading: false, // 页面是否加载中
                 queryParam: {}, // 查询参数
                 columns: [], // 表头
-                pagination: { showSizeChanger: true, hideOnSinglePage: true },
+                pagination: { showSizeChanger: true },
                 description: "",
                 plant: '',
                 scrollSize: {},

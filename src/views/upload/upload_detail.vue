@@ -46,7 +46,7 @@ export default {
       loading: false, // 页面是否加载中
       queryParam: {}, // 查询参数
       columns: [], // 表头
-      pagination: { showSizeChanger: true, hideOnSinglePage: true },
+      pagination: { showSizeChanger: true },
       description: "",
       scroll: { x: 0 }
     };
@@ -173,13 +173,23 @@ export default {
     setColumns(cols) {
       this.columns.splice(0);
       for (let key in cols) {
-        this.columns.push({
-          title: cols[key],
-          dataIndex: key,
-          align: "center",
-          width: 200,
-          sorter: true
-        });
+        if(key != 'UPLOAD_STATUS') {
+          this.columns.push({
+            title: cols[key],
+            dataIndex: key,
+            align: "center",
+            width: 150,
+            sorter: true
+          });
+        }else{
+          this.columns.unshift({
+            title: cols[key],
+            dataIndex: key,
+            align: "center",
+            width: 400,
+            sorter: true
+          });
+        }
       }
       this.scroll.x = 0;
       this.columns.forEach(el => {

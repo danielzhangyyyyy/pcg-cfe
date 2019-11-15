@@ -754,7 +754,7 @@ let filter_langEn = [
         index: 2,
         label: 'Cost Elem',
         decorator: 'costElem',
-        required: false,
+        required: true,
         allowClear: true,
         editDisabled: false,
         message: 'Please select Cost Elem',
@@ -840,7 +840,7 @@ let filter_langEn = [
         inputType: 'dropDown',
         // text: '',
         dropDownList: []
-    }, 
+    },
     {
         index: 9,
         label: 'Part Number',

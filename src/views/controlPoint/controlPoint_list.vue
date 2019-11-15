@@ -34,50 +34,50 @@
                 ref="table"
                 :columns="columns1"
                 :loading="loading"
-                :scroll="{ x: true }"
                 size="small"
                 :pagination="false"
                 :dataSource="dataSource1">
-            <a slot="operation" slot-scope="text, record">
-                <span>
-                    <a-button style="width: 142px" v-if="record.controlPoint ==='Calculate'" type="primary" :disabled="CalculateSubmitDIS" @click="calculateSubmit">Calculate Submit</a-button>
-                    <a-button style="width: 142px" v-if="record.controlPoint ==='Bake'" type="primary" :disabled="BakeSubmitDIS" @click="bakeSubmit">Bake Submit</a-button>
-                    <a-button style="width: 142px" v-if="record.controlPoint ==='Partial Bake'" type="primary" :disabled="PartialBakeDIS" @click="partialBake">Partial Bake</a-button>
-                    <a-button style="width: 142px;margin-bottom: 10px" v-if="record.controlPoint ==='Write Back'" type="primary" :disabled="PrewritebackDIS" @click="preWriteBack">Pre write back</a-button><br/>
-                    <a-button style="width: 142px" v-if="record.controlPoint ==='Write Back'" type="primary" :disabled="WriteBackDIS" @click="writeBack">Write Back</a-button>
-                </span>
-            </a>
+            <a slot="operation" slot-scope="text, record"
+                ><span>
+                    <a-button style="width: 110px" v-if="record.controlPoint ==='Calculate'" type="primary" :disabled="CalculateSubmitDIS" @click="calculateSubmit">Calculate</a-button>
+                    <a-button style="width: 110px" v-if="record.controlPoint ==='Bake'" type="primary" :disabled="BakeSubmitDIS" @click="bakeSubmit">Bake</a-button>
+                    <a-button style="width: 110px" v-if="record.controlPoint ==='Partial Bake'" type="primary" :disabled="PartialBakeDIS" @click="partialBake">Partial Bake</a-button>
+                    <a-button style="width: 110px;padding: 0 6px; margin-bottom: 10px" v-if="record.controlPoint ==='Write Back'" type="primary" :disabled="PrewritebackDIS" @click="preWriteBack">Pre write back</a-button><br/>
+                    <a-button style="width: 110px" v-if="record.controlPoint ==='Write Back'" type="primary" :disabled="WriteBackDIS" @click="writeBack">Write Back</a-button>
+                </span></a>
         </a-table>
-        <div class="table-page-search-wrapper">
-            <a-form layout="inline" :form="form">
-                <a-row :gutter="48">
-                    <a-col :md="8" :sm="24" v-for="item in filterList.slice(0,2)" :key="item.index">
-                        <a-form-item :label="item.label">
-                            <a-input
-                                    :placeholder="item.placeHolder"
-                                    v-if="item.inputType=='input'"
-                                    :disabled="item.editDisabled"
-                                    v-decorator="[item.decorator, {rules: [{required: item.required, message: item.message }]}]"/>
-                            <a-select
-                                    showSearch
-                                    :getPopupContainer="getPopupContainer"
-                                    :filterOption="filterOption"
-                                    optionFilterProp="children"
-                                    v-if="item.inputType=='dropDown'"
-                                    :placeholder="item.placeHolder"
-                                    :allowClear="item.allowClear"
-                                    v-decorator="[item.decorator, {initialValue: item.text, rules: [{required: item.required, message: item.message }]}]"
-                                    @change="handleDropDownChange($event, item.decorator)">
-                                <a-select-option
-                                        v-for="(element, i) in item.dropDownList"
-                                        :key="i"
-                                        :value="element">
-                                    {{ element }}
-                                </a-select-option>
-                            </a-select>
-                        </a-form-item>
-                    </a-col>
-                    <template v-if="advanced">
+        <div class="title">
+            <div class="table-page-search-wrapper">
+                <a-form layout="inline" :form="form">
+                    <a-row :gutter="48">
+                        <a-col :md="8" :sm="24" v-for="item in filterList.slice(0,2)" :key="item.index">
+                            <a-form-item :label="item.label">
+                                <a-input
+                                        :placeholder="item.placeHolder"
+                                        v-if="item.inputType=='input'"
+                                        :disabled="item.editDisabled"
+                                        v-decorator="[item.decorator, {rules: [{required: item.required, message: item.message }]}]"/>
+                                <a-select
+                                        showSearch
+                                        :getPopupContainer="getPopupContainer"
+                                        :filterOption="filterOption"
+                                        optionFilterProp="children"
+                                        v-if="item.inputType=='dropDown'"
+                                        :placeholder="item.placeHolder"
+                                        :allowClear="item.allowClear"
+                                        v-decorator="[item.decorator, {initialValue: item.text, rules: [{required: item.required, message: item.message }]}]"
+                                        @change="handleDropDownChange($event, item.decorator)">
+                                    <a-select-option
+                                            v-for="(element, i) in item.dropDownList"
+                                            :key="i"
+                                            :value="element">
+                                        {{ element }}
+                                    </a-select-option>
+                                </a-select>
+                            </a-form-item>
+                        </a-col>
+                    </a-row>
+                    <a-row :gutter="48">
                         <a-col :md="8" :sm="24" v-for="item in filterList.slice(2)" :key="item.index">
                             <a-form-item :label="item.label">
                                 <a-date-picker
@@ -89,28 +89,23 @@
                                         v-decorator="[item.decorator, {rules: [{required: item.required, message: item.message }]}]"/>
                             </a-form-item>
                         </a-col>
-                    </template>
-                    <a-col :md="!advanced && 8 || 24" :sm="24">
-                        <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-                            <a-button type="primary" @click="newCycle">New Cycle</a-button>
-                          <a @click="toggleAdvanced" style="margin-left: 8px">
-                            {{ advanced ? $t('lang.tabComToggleCloseName') : $t('lang.tabComToggleShowName') }}
-                            <a-icon :type="advanced ? 'up' : 'down'" />
-                          </a>
-                        </span>
-                    </a-col>
-                </a-row>
-            </a-form>
+                        <a-col :md="8" :sm="24">
+                            <span>
+                                <a-button type="primary" @click="newCycle">New Cycle</a-button>
+                            </span>
+                        </a-col>
+                    </a-row>
+                </a-form>
+            </div>
+            <a-table
+                    ref="table"
+                    :columns="columns5"
+                    :loading="loading"
+                    size="small"
+                    :pagination="false"
+                    :dataSource="dataSource5">
+            </a-table>
         </div>
-        <a-table
-                ref="table"
-                :columns="columns5"
-                :loading="loading"
-                :scroll="scrollSize"
-                size="small"
-                :pagination="false"
-                :dataSource="dataSource5">
-        </a-table>
     </a-card>
 </template>
 
@@ -146,7 +141,7 @@
                 searchLoading: false,
                 cycleMap: {},
                 loading: false, // 页面是否加载中
-                advanced: false, // 高级搜索 展开/关闭
+                advanced: true, // 高级搜索 展开/关闭
                 queryParam: {
                     cycleType: 'FINAL'
                 }, // 查询参数
@@ -163,7 +158,8 @@
                 PrewritebackDIS: false,
                 WriteBackDIS: false,
                 NewCycleDIS: false,
-                scrollSize: {},
+                scrollSize1: {},
+                scrollSize5: {},
                 // 表头
                 columns1: [],
                 columns5: [],
@@ -183,7 +179,8 @@
             this.changeLanguage()
             this.getListFun()
             this.setDropDownLists();
-            this.scrollSize.x = getXScrollSize(this.columns1,0);
+            this.scrollSize1.x = getXScrollSize(this.columns1,0);
+            this.scrollSize5.x = getXScrollSize(this.columns5,0);
         },
         watch: {
             cycleDataList() {
@@ -265,8 +262,8 @@
                 this.form.validateFields((err, values) => {
                     if (!err) {
                         for (let key in values) this.queryParam[key] = values[key];
-                        this.queryParam.cycleMonth = moment(values.cycleMonth).format('YYYY-MM-DD')
-                        this.queryParam.forecastMonth = moment(values.forecastMonth).format('YYYY-MM-DD')
+                        this.queryParam.cycleMonth = moment(values.cycleMonth).format('MM/DD/YYYY')
+                        this.queryParam.forecastMonth = moment(values.forecastMonth).format('MM/DD/YYYY')
                         NewCycle(this.queryParam).then(res=>{
                             this.initData(res)
                         })
@@ -304,7 +301,7 @@
                             element.key = index
                             if (element.controlPoint === 'Calculate') {
                                 that.dataSource1.unshift(element)
-                                element.controlPointStatus === 'NEW CYCLE' ? that.CalculateSubmitDIS = false: that.CalculateSubmitDIS = true
+                                element.controlPointStatus === 'RUNNING' ? that.CalculateSubmitDIS = true: that.CalculateSubmitDIS = false
                             } else if (element.controlPoint === 'Bake') {
                                 that.dataSource1.splice(1, 0, element)
                                 element.controlPointStatus === 'NEW CYCLE' ? that.BakeSubmitDIS = false: that.BakeSubmitDIS = true

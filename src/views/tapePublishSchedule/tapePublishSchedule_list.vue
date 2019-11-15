@@ -107,7 +107,7 @@ export default {
     },
     UploadOnClick() {
       this.$router.push(
-        `/upload/upload_list/${this.uploadId}/origin/${this.$route.name}`
+        `/upload/upload_list/${this.uploadId}/origin/${this.$route.name}/eventName/rptId`
       );
     },
     exportExcelOnClick() {

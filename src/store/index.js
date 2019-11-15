@@ -10,20 +10,20 @@ import getters from './getters'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  modules: {
-    app,
-    getMenu,
-    user,
-    permission
-  },
-  state: {
+    modules: {
+        app,
+        getMenu,
+        user,
+        permission
+    },
+    state: {
 
-  },
-  mutations: {
+    },
+    mutations: {
 
-  },
-  actions: {
+    },
+    actions: {
 
-  },
-  getters
+    },
+    getters,
 })

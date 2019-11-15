@@ -96,26 +96,23 @@
                         </a-col>
                     </template>
                     <a-col :md="!advanced && 8 || 24" :sm="24">
-            <span
-                    class="table-page-search-submitButtons"
-                    :style="advanced && { float: 'right', overflow: 'hidden' } || {} "
-            >
-              <a-button
-                      type="primary"
-                      icon="search"
-                      :loading="searchLoading"
-                      @click="searchOnClick"
-              >{{ $t('lang.tabComSearchButtonName') }}</a-button>
-              <a-button
-                      style="margin-left: 8px"
-                      icon="undo"
-                      @click="() => {form.resetFields();setRequiredDefault();}"
-              >{{ $t('lang.tabComResetButtonName') }}</a-button>
-              <a @click="toggleAdvanced" style="margin-left: 8px">
-                {{ advanced ? $t('lang.tabComToggleCloseName') : $t('lang.tabComToggleShowName') }}
-                <a-icon :type="advanced ? 'up' : 'down'"/>
-              </a>
-            </span>
+                        <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
+                          <a-button
+                                  type="primary"
+                                  icon="search"
+                                  :loading="searchLoading"
+                                  @click="searchOnClick"
+                          >{{ $t('lang.tabComSearchButtonName') }}</a-button>
+                          <a-button
+                                  style="margin-left: 8px"
+                                  icon="undo"
+                                  @click="() => {form.resetFields();setRequiredDefault();}"
+                          >{{ $t('lang.tabComResetButtonName') }}</a-button>
+                          <a @click="toggleAdvanced" style="margin-left: 8px">
+                            {{ advanced ? $t('lang.tabComToggleCloseName') : $t('lang.tabComToggleShowName') }}
+                            <a-icon :type="advanced ? 'up' : 'down'"/>
+                          </a>
+                        </span>
                     </a-col>
                 </a-row>
             </a-form>
@@ -344,7 +341,8 @@
                                 (key === "ownerCosttape" || key === "partNumber") &&
                                 (values[key] != undefined && values[key] !== "")
                             ) {
-                                this.queryParam[key] = "%" + values[key] + "%";
+                                let val = values[key].trim()
+                                val? this.queryParam[key] = `%${val}%`: ''
                             } else if (
                                 key === "sysLastModifiedDateStart" &&
                                 !isNullOrUndefined(values[key])
@@ -360,6 +358,7 @@
                             }
                         }
                         this.$refs.table.refresh(true);
+                        this.getMonths();
                     } else {
                         this.$notification.open({
                             message: "Search condition error:",
@@ -395,7 +394,7 @@
             getMonths() {
                 getDropDownList({
                     moduleName: "getMonthListByCycle",
-                    cycle: "CURRENT"
+                    cycle: this.queryParam.cycle
                 }).then(res => {
                     for (let key in res.result[0]) {
                         for (let item of this.columns) {

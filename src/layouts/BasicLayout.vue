@@ -63,6 +63,15 @@
       <!-- Setting Drawer (show in development mode) -->
       <setting-drawer v-if="!production"></setting-drawer>
       <announcement></announcement>
+      <browserDetecter></browserDetecter>
+      <news
+        ref="news"
+        :content="content"
+        :visible="newVisible"
+        src="login"
+        @handleVisible="handleNewsVisible"
+        :rid="newsRid"
+      ></news>
     </a-layout>
   </a-layout>
 </template>
@@ -79,13 +88,11 @@ import SideMenu from "@/components/Menu/SideMenu";
 import GlobalHeader from "@/components/GlobalHeader";
 import GlobalFooter from "@/components/GlobalFooter";
 import SettingDrawer from "@/components/SettingDrawer";
-import {
-  asyncRouterMap,
-  constructRouter,
-  constantRouterMap
-} from "@/config/router.config.js";
+import { constructRouter, constantRouterMap } from "@/config/router.config.js";
 import announcement from "@/components/announcement/announcement";
-/* import { clearTimeout } from "timers"; */
+import { news, browserDetecter } from "@/components";
+import { getNews } from "@api/news_api";
+import Vue from "vue";
 
 export default {
   name: "BasicLayout",
@@ -97,7 +104,9 @@ export default {
     GlobalHeader,
     GlobalFooter,
     SettingDrawer,
-    announcement
+    announcement,
+    news,
+    browserDetecter
   },
   data() {
     return {
@@ -105,7 +114,10 @@ export default {
       production: config.production,
       collapsed: false,
       menus: [],
-      timer: null
+      timer: null,
+      content: "",
+      newVisible: false,
+      newsRid: ""
     };
   },
   computed: {
@@ -144,14 +156,17 @@ export default {
     }
   },
   created() {
-    this.menus = asyncRouterMap.find(item => item.path === "/").children;
+    this.menus = constructRouter(Vue.ls.get("GET_MENU")).find(
+      item => item.path === "/"
+    ).children;
     // this.menus = this.mainMenu.find((item) => item.path === '/').children
     this.collapsed = !this.sidebarOpened;
+    this.getNewsFn();
   },
   mounted() {
-    window.addEventListener('click', ()=>{
-      this.timeOutHandler()
-    })
+    window.addEventListener("click", () => {
+      this.timeOutHandler();
+    });
     const userAgent = navigator.userAgent;
     if (userAgent.indexOf("Edge") > -1) {
       this.$nextTick(() => {
@@ -164,6 +179,15 @@ export default {
   },
   methods: {
     ...mapActions(["setSidebar"]),
+    getNewsFn() {
+      getNews({ readMark: 0 }).then(res => {
+        if (res.result) {
+          this.newVisible = true;
+          this.content = res.result.msgContent;
+          this.newsRid = res.result.rid;
+        }
+      });
+    },
     timeOutHandler() {
       if (this.timer) {
         clearTimeout(this.timer);
@@ -225,6 +249,9 @@ export default {
     },
     drawerClose() {
       this.collapsed = false;
+    },
+    handleNewsVisible(val) {
+      this.visible = val;
     }
   }
 };

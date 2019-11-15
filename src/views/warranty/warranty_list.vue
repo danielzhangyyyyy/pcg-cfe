@@ -121,13 +121,6 @@
                 :rowKey="(record) => record.rid"
                 :data="loadData"
                 :alert="options.alert"
-                :customRow="(record) => { return {
-                    on:{
-                      // dblclick:(record)=>{
-                      //   this.doubleClickOnRow(record,true)
-                      // }
-                    }
-                  }}"
                 :rowSelection="options.rowSelection">
         </s-table>
     </a-card>
@@ -170,16 +163,6 @@
                 columns: [],
                 loadData: '',
                 scrollSize: {},
-                // 加载数据方法 必须为 Promise 对象
-                // loadData: parameter => {
-                //   console.log('loadData.parameter', parameter)
-                //   return list(Object.assign(parameter, this.queryParam))
-                //     .then(res => {
-                //       console.log(res.result)
-                //       return res.result
-                //     })
-                // },
-                // custom table alert & rowSelection
                 options: {
                     alert: {
                         show: true, clear: () => {
@@ -239,7 +222,6 @@
             },
             '$route': {
                 handler(route) {
-                    console.log(route.path)
                     if (route.path === '/warranty/warranty_list') {
                         this.handleOk()
                     }
@@ -254,7 +236,7 @@
             getMonths() {
                 getDropDownList({
                     moduleName: "getMonthListByCycle",
-                    cycle: "CURRENT"
+                    cycle: this.queryParam.cycle
                 }).then(res => {
                     for (let key in res.result[0]) {
                         for (let item of this.columns) {
@@ -279,6 +261,7 @@
                         this.queryParam.brand = values.brand;
                         this.queryParam.plantType = values.plantType;
                         this.$refs.table.refresh(true);
+                        this.getMonths();
                     } else {
                         this.$notification.open({
                             message: "Search condition error:",

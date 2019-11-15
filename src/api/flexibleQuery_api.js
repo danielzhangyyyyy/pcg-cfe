@@ -1,19 +1,24 @@
-import { axios } from '@/utils/request'
+import { axios, CancelToken } from '@/utils/request'
+
 
 const api = {
   getCategory: 'flexibleQuery/getCategoryList',
   getReport: 'flexibleQuery/getReportList',
   getFilter: 'flexibleQuery/getReportFilter',
   getData: 'flexibleQuery/search',
-  commonList: 'common/getFlexibleQueryList',
+  commonList: 'common/getCommonList',
   execute: 'flexibleQuery/execute'
 }
 
 export default api
 
-export function executeApi(parameter) {
+export function cancelFns() {
+  let cancelgetReportFilter;
+}
+
+export function executeApi(url = 'flexibleQuery/execute', parameter) {
   return axios({
-    url: api.execute,
+    url: url,
     method: 'post',
     data: parameter
   })
@@ -48,7 +53,10 @@ export function getReportFilter(parameter) {
   return axios({
     url: api.getFilter,
     method: 'post',
-    data: parameter
+    data: parameter,
+    cancelToken: new CancelToken(function (c) {
+      cancelFns.cancelgetReportFilter = c;
+    })
   })
 }
 
@@ -59,3 +67,4 @@ export function getReportData(parameter) {
     data: parameter
   })
 }
+

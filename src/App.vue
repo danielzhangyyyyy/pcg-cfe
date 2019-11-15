@@ -11,12 +11,15 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 import enUS from 'ant-design-vue/lib/locale-provider/en_US'
+
 import { AppDeviceEnquire } from '@/utils/mixin'
 import { log } from 'util'
 import { DEFAULT_LANGUAGE } from '@/store/mutation-types'
 import router from './router'
 import Router from 'vue-router'
 import store from './store'
+
+import permission from '@/store/modules/permission'
 import constantRouterMap from '@/config/router.config'
 
 export default {

@@ -25,7 +25,8 @@
                                         v-for="(element, i) in item.dropDownList"
                                         :key="i"
                                         :value="element"
-                                >{{ element }}</a-select-option>
+                                >{{ element }}
+                                </a-select-option>
                             </a-select>
                             <a-auto-complete
                                     v-if="item.inputType=='autoComplete'"
@@ -69,7 +70,8 @@
                                             v-for="(element, i) in item.dropDownList"
                                             :key="i"
                                             :value="element"
-                                    >{{ element }}</a-select-option>
+                                    >{{ element }}
+                                    </a-select-option>
                                 </a-select>
                                 <a-auto-complete
                                         v-if="item.inputType=='autoComplete'"
@@ -84,39 +86,59 @@
                         </a-col>
                     </template>
                     <a-col :md="!advanced && 8 || 24" :sm="24">
-                        <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-                          <a-checkbox @change="expandAllOnChange">Expand All</a-checkbox>
-                          <a-button type="primary" icon="search" :loading="searchLoading" @click="searchOnClick">
-                              {{ $t('lang.tabComSearchButtonName') }}</a-button>
-                          <a-button style="margin-left: 8px" icon="undo" @click="() => {form.resetFields()}">
-                              {{ $t('lang.tabComResetButtonName') }}</a-button>
-                          <a @click="toggleAdvanced" style="margin-left: 8px">
-                            {{ advanced ? $t('lang.tabComToggleCloseName') : $t('lang.tabComToggleShowName') }}
-                            <a-icon :type="advanced ? 'up' : 'down'" />
-                          </a>
-                        </span>
+            <span
+                    class="table-page-search-submitButtons"
+                    :style="advanced && { float: 'right', overflow: 'hidden' } || {} "
+            >
+              <a-checkbox @change="expandAllOnChange">Expand All</a-checkbox>
+              <a-button
+                      type="primary"
+                      icon="search"
+                      :loading="searchLoading"
+                      @click="searchOnClick"
+              >{{ $t('lang.tabComSearchButtonName') }}</a-button>&nbsp;&nbsp;
+              <a-button type="primary" icon="download" @click="exportExcelOnClick">Export Excel</a-button>&nbsp;&nbsp;
+              <a-button type="primary" icon="plus-circle" @click="modelListOnClick">Model List</a-button>&nbsp;&nbsp;
+              <a-button type="primary" icon="form" @click="executeModelListOnClick">Execute Model List</a-button>
+              <a-button
+                      style="margin-left: 8px"
+                      icon="undo"
+                      @click="reset"
+              >{{ $t('lang.tabComResetButtonName') }}</a-button>
+                <!--<a @click="toggleAdvanced" style="margin-left: 8px">-->
+                <!--{{ advanced ? $t('lang.tabComToggleCloseName') : $t('lang.tabComToggleShowName') }}-->
+                <!--<a-icon :type="advanced ? 'up' : 'down'" />-->
+                <!--</a>-->
+            </span>
                     </a-col>
                 </a-row>
             </a-form>
         </div>
 
-        <div class="table-operator">
-            <a-button type="primary" icon="download" @click="exportExcelOnClick">Export Excel</a-button>
-            <a-button type="primary" icon="plus-circle" @click="modelListOnClick">Model List</a-button>
-            <a-button type="primary" icon="form" @click="executeModelListOnClick">Execute Model List</a-button>
-        </div>
-
         <a-alert style="margin-bottom: 16px">
             <template slot="message">
                 <div style="margin-right: 12px">
-                  <span v-if="!title.family" :style="{'font-weight': 'bold'}">Cost BOM</span>
-                  <span v-else>
-                      <span :style="{'font-weight': 'bold'}">Product Description: &nbsp;</span>{{title.description}}&nbsp;&nbsp;
-                      <span :style="{'font-weight': 'bold'}">Brand: &nbsp;</span>{{title.brand}}&nbsp;&nbsp;
-                      <span :style="{'font-weight': 'bold'}">Product Family: &nbsp;</span>{{title.family}}&nbsp;&nbsp;
-                      <span :style="{'font-weight': 'bold'}">MTM: &nbsp;</span>{{title.mtm}}&nbsp;&nbsp;
-                      <span :style="{'font-weight': 'bold'}">Cost Life: &nbsp;</span>{{title.life}}&nbsp;&nbsp;
-                  </span>
+                    <span v-if="!title.family" :style="{'font-weight': 'bold'}">Cost BOM</span>
+                    <span v-else>
+            <span :style="{'font-weight': 'bold'}">Product Description: &nbsp;</span>
+            {{title.description}}&nbsp;&nbsp;
+            <span
+                    :style="{'font-weight': 'bold'}"
+            >Brand: &nbsp;</span>
+            {{title.brand}}&nbsp;&nbsp;
+            <span
+                    :style="{'font-weight': 'bold'}"
+            >Product Family: &nbsp;</span>
+            {{title.family}}&nbsp;&nbsp;
+            <span
+                    :style="{'font-weight': 'bold'}"
+            >MTM: &nbsp;</span>
+            {{title.mtm}}&nbsp;&nbsp;
+            <span
+                    :style="{'font-weight': 'bold'}"
+            >Cost Life: &nbsp;</span>
+            {{title.life}}&nbsp;&nbsp;
+          </span>
                 </div>
             </template>
         </a-alert>
@@ -127,7 +149,7 @@
                 :scroll="scrollSize1"
                 :columns="columns1"
                 :dataSource="dataSource"
-                :pagination="pagination"
+                :pagination="false"
                 :loading="loading"
                 :expandedRowKeys="expandedRowKeys"
                 @change="handleTableChange"
@@ -135,25 +157,26 @@
                 :rowClassName="rowClassNameFirstTable"
                 :style="{'padding-top': '1px'}"
         >
-          <span slot="part" slot-scope="text, record">
-            <a
-                    v-if="record.isCosttape=='Y'&&record.isChild&&(record.costType == 'OPTION'||record.costType == 'DUMMY'||record.costType == 'COMP-COST'||record.costType == 'VISUAL')"
-                    @click="subPartOnClick(record)"
-                    :style="{'font-weight': 'bold'}"
-                    :class="{visitedPart: visitedKey.indexOf(record.part) != -1}"
-            >{{ text }}</a>
-            <a
-                    v-else-if="(record.costType == 'OPTION'||record.costType == 'DUMMY'||record.costType == 'COMP-COST'||record.costType == 'VISUAL')&&record.isChild"
-                    @click="subPartOnClick(record)"
-                    :class="{visitedPart: visitedKey.indexOf(record.part) != -1}"
-            >{{ text }}</a>
-            <a
-                    v-else-if="(record.costType == 'OPTION'||record.costType == 'DUMMY'||record.costType == 'COMP-COST'||record.costType == 'VISUAL')&&record.lvl==1&&record.connectByIsLeaf==1"
-                    @click="subPartOnClick(record)"
-                    :class="{visitedPart: visitedKey.indexOf(record.part) != -1}"
-            >{{text}}</a>
-            <span v-else>{{ text }}</span>
-          </span>
+            <span slot="convert" slot-scope="text">{{text|convert}}</span>
+            <span slot="part" slot-scope="text, record">
+        <a
+                v-if="record.isCosttape=='Y'&&record.isChild&&(record.costType == 'OPTION'||record.costType == 'DUMMY'||record.costType == 'COMP-COST'||record.costType == 'VISUAL')"
+                @click="subPartOnClick(record)"
+                :style="{'font-weight': 'bold'}"
+                :class="{visitedPart: visitedKey.indexOf(record.part) != -1}"
+        >{{ text }}</a>
+        <a
+                v-else-if="(record.costType == 'OPTION'||record.costType == 'DUMMY'||record.costType == 'COMP-COST'||record.costType == 'VISUAL')&&record.isChild"
+                @click="subPartOnClick(record)"
+                :class="{visitedPart: visitedKey.indexOf(record.part) != -1}"
+        >{{ text }}</a>
+        <a
+                v-else-if="(record.costType == 'OPTION'||record.costType == 'DUMMY'||record.costType == 'COMP-COST'||record.costType == 'VISUAL')&&record.lvl==1&&record.connectByIsLeaf==1"
+                @click="subPartOnClick(record)"
+                :class="{visitedPart: visitedKey.indexOf(record.part) != -1}"
+        >{{text}}</a>
+        <span v-else>{{ text }}</span>
+      </span>
         </a-table>
 
         <a-table
@@ -162,11 +185,13 @@
                 :scroll="scrollSize2"
                 :columns="columns2"
                 :dataSource="dataSource2"
-                :pagination="pagination2"
+                :pagination="false"
                 :loading="loading"
                 :style="{'padding-top': '10px'}"
                 :rowClassName="rowClassName"
-        ></a-table>
+        >
+            <span slot="convert" slot-scope="text">{{text|convert}}</span>
+        </a-table>
     </a-card>
 </template>
 
@@ -215,23 +240,23 @@
                 searchLoading: false,
                 loading: false, // 页面是否加载中
                 advanced: true, // 高级搜索 展开/关闭
-                queryParam: { cycle: "CURRENT" }, // 查询参数
+                queryParam: {cycle: "CURRENT"}, // 查询参数
                 optionAlertShow: true, // 是否显示选择框
                 selectedRowKeys: [], // 选中的行的keys数组
                 selectedRows: [], // 选中的行的全部数组
                 columns1: [], // 表头
-                pagination: { showSizeChanger: true, hideOnSinglePage: true },
+                pagination: {showSizeChanger: true},
                 dataSource2: [],
                 columns2: [],
-                pagination2: { showSizeChanger: true, hideOnSinglePage: true },
+                pagination2: {showSizeChanger: true},
                 loading2: false,
                 description: "",
-                title:{
-                    description: '',
-                    brand: '',
-                    mtm: '',
-                    family: '',
-                    life: ''
+                title: {
+                    description: "",
+                    brand: "",
+                    mtm: "",
+                    family: "",
+                    life: ""
                 },
                 scrollSize1: {y: 350},
                 scrollSize2: {y: 350},
@@ -247,15 +272,17 @@
         created() {
             this.visitedKey.length = 0;
             this.changeLanguage();
-            this.scrollSize1.x = getXScrollSize(this.columns1,0);
-            this.scrollSize2.x = getXScrollSize(this.columns2,0);
+            this.scrollSize1.x = getXScrollSize(this.columns1, 0);
+            this.scrollSize2.x = getXScrollSize(this.columns2, 0);
             this.getDropDown(
-                { moduleName: "getCycleList" },
+                {moduleName: "getCycleList"},
                 this.cycleDataList,
                 "CYCLE"
             );
+            let cycleParam;
+            this.form.getFieldValue("cycle") === 'Last Run Copy' ? cycleParam = 'PREVIOUS' : cycleParam = this.form.getFieldValue("cycle");
             this.getDropDown(
-                { CYCLE: this.form.getFieldValue("cycle") },
+                {CYCLE: cycleParam},
                 this.brandDataList,
                 "brand",
                 getBrand
@@ -266,7 +293,7 @@
             cycleDataList(val) {
                 this.filterList.forEach(element => {
                     if (element["decorator"] == "cycle") {
-                        element["dropDownList"] = [].concat(this.cycleDataList);
+                        element["dropDownList"] = ['Last Run Copy'].concat(this.cycleDataList);
                     }
                 });
             },
@@ -307,7 +334,7 @@
             },
             language(val) {
                 this.changeLanguage();
-            },
+            }
             // $route: {
             //     handler(route) {
             //         if (route.path === "/costBom/costBom_list") {
@@ -318,8 +345,33 @@
             // }
         },
         methods: {
+            reset() {
+                this.form.resetFields();
+                this.cycleDataList.splice(0);
+                this.assemblyDataList.splice(0); // do not loaded in created
+                this.plantDataList.splice(0); // do not loaded in created
+                this.countryDataList.splice(0); // do not loaded in created
+                this.brandDataList.splice(0);
+                this.prdFamilyDataList.splice(0); // do not loaded in created
+                this.getDropDown(
+                    {moduleName: "getCycleList"},
+                    this.cycleDataList,
+                    "CYCLE"
+                );
+                this.getDropDown(
+                    {CYCLE: this.form.getFieldValue("cycle")},
+                    this.brandDataList,
+                    "brand",
+                    getBrand
+                );
+            },
             getMonths() {
-                getDropDownList({moduleName: "getMonthListByCycle", cycle: this.queryParam.cycle}).then(res => {
+                let cycleParam;
+                this.form.getFieldValue("cycle") === 'Last Run Copy' ? cycleParam = 'CURRENT' : cycleParam = this.form.getFieldValue("cycle");
+                getDropDownList({
+                    moduleName: "getMonthListByCycle",
+                    cycle: cycleParam
+                }).then(res => {
                     for (let key in res.result[0]) {
                         for (let item of this.columns1) {
                             if (
@@ -368,47 +420,59 @@
                         self.executeLoading = true;
                         executeReportWorkflow(params)
                             .then(res => {
-                                if (res.code == "0") {
+                                if (res.code == 0) {
                                     self.$notification.open({
                                         message: "Success",
                                         description: self.$t("lang.messageExecuteSuccess"),
                                         duration: 6,
-                                        style: { background: "#52C41A" }
+                                        style: {background: "#52C41A"}
                                     });
-                                } else if (res.code == "1") {
+                                } else if (res.code == 1) {
                                     self.$notification.open({
                                         message: "Info",
+                                        duration: 6,
                                         description: self.$t("lang.messageExecuting"),
-                                        style: { background: "#52C41A" }
+                                        style: {background: "#52C41A"}
                                     });
                                 } else {
                                     self.$notification.open({
                                         message: "Error",
                                         description: self.$t("lang.messageExecuteFailed"),
                                         duration: 6,
-                                        style: { background: "#F5222D" }
+                                        style: {background: "#F5222D"}
                                     });
                                 }
                                 self.executeLoading = false;
                             })
                             .catch(err => {
                                 self.executeLoading = false;
-                                self.$notification.open({
-                                    message: "Error",
-                                    description: self.$t("lang.messageExecuteFailed"),
-                                    duration: 6,
-                                    style: { background: "#F5222D" }
-                                });
+                                // self.$notification.open({
+                                //   message: "Error",
+                                //   description: self.$t("lang.messageExecuteFailed"),
+                                //   duration: 6,
+                                //   style: { background: "#F5222D" }
+                                // });
                             });
                     },
-                    onCancel() {}
+                    onCancel() {
+                    }
                 });
             },
             exportExcelOnClick() {
-                exportByURL(
-                    { ...this.queryParam, eventName: "UPLOAD_UI_COST_BOM" },
-                    "costBom/exportExcel"
-                );
+                if (this.queryParam.requestId) {
+                    delete this.queryParam.uiName;
+                    exportByURL(
+                        {...this.queryParam, eventName: "EXPORT_UI_COSTBOM"},
+                        "costBom/exportExcel"
+                    );
+                } else {
+                    this.$notification.open({
+                        message: "Warn:",
+                        description: "Please search first before export！",
+                        duration: 6,
+                        style: {background: "#FAAD14"}
+                    });
+                }
             },
             searchOnClick() {
                 this.queryParam.requestId = new moment().format(
@@ -417,22 +481,26 @@
                 this.form.validateFields((err, values) => {
                     console.log("values", values);
                     if (!err) {
+                        this.getShow(values.assembly);
                         this.visitedKey = [];
                         this.queryParam.uiName = "costBom";
-                        this.queryParam.cycle = values.cycle;
+                        values.cycle === 'Last Run Copy' ? this.queryParam.cycle = 'PREVIOUS' : this.queryParam.cycle = values.cycle;
                         this.queryParam.model = values.assembly;
                         this.queryParam.father = values.assembly;
                         this.queryParam.plant = values.plant;
                         this.queryParam.country = values.country;
                         values.brand ? (this.queryParam.brand = values.brand) : "";
-                        values.aspPrdFamily ? (this.queryParam.prodfamily = values.aspPrdFamily) : "";
+                        values.aspPrdFamily
+                            ? (this.queryParam.prodfamily = values.aspPrdFamily)
+                            : "";
                         this.loadData({});
+                        this.getMonths();
                     } else {
                         this.$notification.open({
                             message: "Search condition error:",
                             description: "please input search conditions.",
                             duration: 6,
-                            style: { background: "#F5222D" }
+                            style: {background: "#F5222D"}
                         });
                     }
                 });
@@ -452,7 +520,9 @@
                         dropdownList.splice(0);
                         if (res.code == 0) {
                             if (res.result.lenth != 0) {
-                                res.result.forEach(el => {dropdownList.push(el[key]);});
+                                res.result.forEach(el => {
+                                    dropdownList.push(el[key]);
+                                });
                             }
                             resolve(res);
                         } else {
@@ -461,7 +531,28 @@
                     });
                 });
             },
+            getShow(value) {
+                for (let item in this.title) item = "";
+                getDescription({item: value}).then(res => {
+                    if (res.code == 0) {
+                        this.title.description = res.result.itemDesc;
+                        this.title.brand = res.result.brand;
+                        this.title.family = res.result.aspPrdFamily;
+                        this.title.mtm = res.result.item;
+                        this.title.life = res.result.eolStatus;
+                    } else {
+                        this.$notification.open({
+                            message: "Error:",
+                            description: res.msg,
+                            duration: 6,
+                            style: {background: "#F5222D"}
+                        });
+                    }
+                });
+            },
             handleDropDownChange(value, decorator) {
+                let cycleParam;
+                this.form.getFieldValue("cycle") === 'Last Run Copy' ? cycleParam = 'PREVIOUS' : cycleParam = this.form.getFieldValue("cycle");
                 if (decorator == "assembly" && value != "" && value) {
                     if (this.timer != null) {
                         clearTimeout(this.timer);
@@ -469,51 +560,30 @@
                     this.timer = setTimeout(() => {
                         this.form.resetFields(["plant"]);
                         this.form.resetFields(["country"]);
+                        this.plantDataList = [];
                         this.countryDataList.splice(0);
                         this.getDropDown(
-                            { cycle: this.form.getFieldValue("cycle"), item: value },
+                            {cycle: cycleParam, item: value},
                             this.plantDataList,
                             "plant",
                             getPlantListByAssembly
                         );
-                        this.description = "";
-                        getDescription({ item: value }).then(res => {
-                            if(res.code == 0){
-                                this.title.description = res.result.itemDesc
-                                this.title.brand = res.result.brand
-                                this.title.family = res.result.aspPrdFamily
-                                this.title.mtm = res.result.item
-                                this.title.life = res.result.eolStatus
-                                // this.description = "  Product Description: " + res.result.itemDesc
-                                //     + "  Brand: " + res.result.brand +
-                                //     "  Product Family: " + res.result.aspPrdFamily +
-                                //     "  MTM: " + res.result.item + " " +
-                                //     " Cost Life: " + res.result.eolStatus;
-                            } else {
-                                this.$notification.open({
-                                    message: 'Error:',
-                                    description: res.msg,
-                                    duration: 6,
-                                    style: { background: "#F5222D" }
-                                });
-                            }
-                        });
                         if (!this.assemblyDataList.includes(value)) {
                             this.form.resetFields(["brand"]);
                             this.form.resetFields(["aspPrdFamily"]);
                             this.prdFamilyDataList.splice(0);
                             this.getDropDown(
-                                { cycle: this.form.getFieldValue("cycle"), item: value },
+                                {cycle: cycleParam, item: value},
                                 this.brandDataList,
                                 "brand",
                                 getBrandByAssembly
                             ).then(res => {
                                 if (res.result.length != 0)
-                                    this.form.setFieldsValue({ ["brand"]: res.result[0]["brand"] });
+                                    this.form.setFieldsValue({["brand"]: res.result[0]["brand"]});
                             });
                             this.getDropDown(
                                 {
-                                    cycle: this.form.getFieldValue("cycle"),
+                                    cycle: cycleParam,
                                     brand: this.form.getFieldValue("brand"),
                                     item: this.form.getFieldValue("assembly")
                                 },
@@ -529,11 +599,14 @@
                         }
                     }, 1500);
                 } else if (decorator == "assembly" && (value == "" || !value)) {
+                    if (this.timer != null) {
+                        clearTimeout(this.timer);
+                    }
                     this.form.resetFields(["brand"]);
                     this.form.resetFields(["aspPrdFamily"]);
-                    this.assemblyDataList = []
+                    this.assemblyDataList = [];
                     this.getDropDown(
-                        { CYCLE: this.form.getFieldValue("cycle") },
+                        {CYCLE: cycleParam},
                         this.brandDataList,
                         "brand",
                         getBrand
@@ -544,7 +617,7 @@
                         {
                             plant: value,
                             item: this.form.getFieldValue("assembly"),
-                            cycle: this.form.getFieldValue("cycle")
+                            cycle: cycleParam
                         },
                         this.countryDataList,
                         "country",
@@ -553,16 +626,20 @@
                 } else if (decorator == "brand") {
                     this.form.resetFields(["aspPrdFamily"]);
                     this.getDropDown(
-                        { cycle: this.form.getFieldValue("cycle"), brand: value },
+                        {cycle: cycleParam, brand: value},
                         this.prdFamilyDataList,
                         "aspPrdFamily",
                         getPrdFamilyByBrand
                     );
                 } else if (decorator == "aspPrdFamily") {
                     this.form.resetFields(["assembly"]);
+                    this.form.resetFields(["plant"]);
+                    this.form.resetFields(["country"]);
+                    this.plantDataList.splice(0);
+                    this.countryDataList.splice(0);
                     this.getDropDown(
                         {
-                            cycle: this.form.getFieldValue("cycle"),
+                            cycle: cycleParam,
                             brand: this.form.getFieldValue("brand"),
                             aspPrdFamily: value
                         },
@@ -573,7 +650,7 @@
                 }
             },
             handleTableChange(pagination, filters, sorter) {
-                const pager = { ...this.pagination };
+                const pager = {...this.pagination};
                 pager.current = pagination.current;
                 this.pagination = pager;
                 this.loadData({
@@ -612,14 +689,14 @@
                             message: "Error:",
                             description: res.msg,
                             duration: 6,
-                            style: { background: "#F5222D" }
+                            style: {background: "#F5222D"}
                         });
                         return;
-                    } else {
+                    } else if (res.msg != "NO_DATA_FOUND") {
                         self.expandedRowKeys = [];
-                        const pagination = { ...self.pagination };
+                        const pagination = {...self.pagination};
                         /*   pagination.total = res.result.bom.length;
-                                    pagination.pageSize = res.result.bom.length; */
+                                                                pagination.pageSize = res.result.bom.length; */
                         pagination.total = 300;
                         pagination.pageSize = 300;
                         pagination.current = 1;
@@ -632,7 +709,9 @@
                                 for (let j = 0; j < res.result.bom[i]["subItems"].length; j++) {
                                     res.result.bom[i]["subItems"][j].isChild = true;
                                     res.result.bom[i]["subItems"][j].key =
-                                        res.result.bom[i]["entityDto"].key + "00" + (j + 1).toString();
+                                        res.result.bom[i]["entityDto"].key +
+                                        "00" +
+                                        (j + 1).toString();
                                 }
                                 res.result.bom[i]["entityDto"].children =
                                     res.result.bom[i]["subItems"];
@@ -650,11 +729,14 @@
                             res.result.adder[i].key = i + 1;
                         }
                         self.dataSource2 = res.result.adder;
+                    } else {
+                        self.loading = false;
+                        self.searchLoading = false;
                     }
                 });
             },
             subPartOnClick(record) {
-                console.log(record,'record 222222')
+                console.log(record, "record 222222");
                 this.$store.dispatch("ToggleCloseTab", "");
                 this.visitedKey.push(record.part);
                 setTimeout(() => {
@@ -663,10 +745,14 @@
                         "/costBom/costBom_detail" + this.lastQuery
                     );
                     this.lastQuery = encodeURI(
-                        "?cycle="+record.cycle+
-                        "&partNumber="+record.part+
-                        "&plant="+record.plant+
-                        "&requestId="+this.queryParam.requestId
+                        "?cycle=" +
+                        record.cycle +
+                        "&partNumber=" +
+                        record.part +
+                        "&plant=" +
+                        record.plant +
+                        "&requestId=" +
+                        this.queryParam.requestId
                     ).replace(new RegExp(/(:)/g), "%3A");
                     this.$router.replace({
                         path: "/costBom/costBom_detail",
@@ -734,6 +820,7 @@
     > a:visited {
         color: #9f5fc5 !important;
     }
+
     .visitedPart {
         color: #9f5fc5 !important;
     }

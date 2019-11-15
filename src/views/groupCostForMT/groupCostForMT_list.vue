@@ -117,13 +117,6 @@
                 :rowKey="(record) => record.rid"
                 :data="loadData"
                 :alert="options.alert"
-                :customRow="(record) => { return {
-                    on:{
-                      dblclick:(record)=>{
-                        // this.doubleClickOnRow(record,true)
-                      }
-                    }
-                  }}"
                 :rowSelection="options.rowSelection">
         </s-table>
     </a-card>
@@ -170,16 +163,6 @@
                 columns: [],
                 loadData: '',
                 scrollSize: {},
-                // 加载数据方法 必须为 Promise 对象
-                // loadData: parameter => {
-                //   console.log('loadData.parameter', parameter)
-                //   return list(Object.assign(parameter, this.queryParam))
-                //     .then(res => {
-                //       console.log(res.result)
-                //       return res.result
-                //     })
-                // },
-                // custom table alert & rowSelection
                 options: {
                     alert: {
                         show: true, clear: () => {
@@ -278,7 +261,6 @@
             },
             '$route': {
                 handler(route) {
-                    console.log(route.path)
                     if (route.path === '/groupCostForMT/groupCostForMT_list') {
                         this.handleOk()
                     }
@@ -302,6 +284,7 @@
                             }
                         }
                         this.$refs.table.refresh(true);
+                        this.getMonths();
                     } else {
                         self.$notification.open({
                             message: "Search condition error:",
@@ -329,8 +312,6 @@
             getDropDown(param, dropdownList, key) {
                 getDropDownList(Object.assign({}, param)).then(res => {
                     dropdownList.splice(0);
-                    // console.log(typeof res.result[0],'result')
-                    // if(){}
                     res.result.forEach(el => {
                         if (!isNullOrUndefined(el)) {
                             dropdownList.push(el[key]);
@@ -340,7 +321,6 @@
                 });
             },
             handleDropDownChange(value, decorator) {
-                console.log(value, 2222)
                 if (decorator === 'brand') {
                     this.form.resetFields(["prodFamily"]);
                     this.form.resetFields(["machineType"]);
@@ -363,7 +343,7 @@
                 }
             },
             getMonths() {
-                getDropDownList({moduleName: 'getMonthListByCycle', cycle: 'CURRENT'}).then(res => {
+                getDropDownList({moduleName: 'getMonthListByCycle', cycle: this.queryParam.cycle}).then(res => {
                     for (let key in res.result[0]) {
                         for (let item of this.columns) {
                             if (item.dataIndex && item.dataIndex.toUpperCase() === key.toUpperCase()) {
@@ -377,7 +357,6 @@
                 api(Object.assign({}, params)).then(res => {
                     dropdownList.splice(0);
                     res.result.forEach(el => {
-                        // console.log(el,'el1111111111')
                         dropdownList.push(el[key]);
                     });
                 });
