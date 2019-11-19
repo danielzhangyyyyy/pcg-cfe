@@ -20,7 +20,7 @@
               placeholder="CFE account"
               v-decorator="[
                 'username',
-                {rules: [{ required: true, message: 'Please enter your CFE account' }], validateTrigger: 'change'}
+                {rules: [{ required: true, message: 'Please enter your CFE account(admin)' }], validateTrigger: 'change'}
               ]"
             >
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }" />
@@ -35,7 +35,7 @@
               placeholder="AD password"
               v-decorator="[
                 'password',
-                {rules: [{ required: true, message: 'Please enter your password' }], validateTrigger: 'blur'}
+                {rules: [{ required: true, message: 'Please enter your password(admin)' }], validateTrigger: 'blur'}
               ]"
             >
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />

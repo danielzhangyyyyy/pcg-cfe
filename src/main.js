@@ -8,7 +8,7 @@ import store from './store/'
 import './core/lazy_use' // 按需加载
 import {VueAxios} from './utils/request' // 按需加载
 // mock
-// import './mock'
+import './mock'
 import bootstrap from './core/bootstrap'
 import './core/use'
 import './permission' // permission control
